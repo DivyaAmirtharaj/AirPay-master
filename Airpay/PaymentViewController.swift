@@ -30,7 +30,7 @@ class PaymentViewController: UIViewController {
         if let balanceText = user?.balance {
             print(balanceText)
             
-            balanceLabel.text = balanceText
+            balanceLabel.text = String(balanceText)
         }
         
         // Do any additional setup after loading the view.
