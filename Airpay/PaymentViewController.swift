@@ -13,6 +13,7 @@ class PaymentViewController: UIViewController {
     // MARK: Properties
     
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var balanceLabel: UILabel!
     
     var user: User?
     
@@ -24,6 +25,12 @@ class PaymentViewController: UIViewController {
             print(nameText)
             
             nameLabel.text = nameText
+        }
+        
+        if let balanceText = user?.balance {
+            print(balanceText)
+            
+            balanceLabel.text = balanceText
         }
         
         // Do any additional setup after loading the view.

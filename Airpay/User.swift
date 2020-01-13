@@ -23,4 +23,8 @@ class User {
         self.name = name
         self.balance = 0
     }
+    
+    func updateBalance(change: Int) {
+        self.balance += change
+    }
 }
