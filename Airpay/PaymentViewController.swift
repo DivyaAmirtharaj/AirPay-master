@@ -32,7 +32,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     
     var user: User?
-    var nearbyUsers = [String]()
+    var nearbyUsers = ["sample1", "sample2"]
     
 
     override func viewDidLoad() {
@@ -98,8 +98,9 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         
         if let message = textField.text {
-            MultiPeer.instance.send(object: "-$" + message, type: DataType.message.rawValue)
+            if !message.isEmpty { MultiPeer.instance.send(object: "-$" + message, type: DataType.message.rawValue)
             }
+        }
         
     }
     
@@ -117,7 +118,8 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
         if let message = textField.text {
-            MultiPeer.instance.send(object: "+$" + message, type: DataType.message.rawValue)
+               if !message.isEmpty { MultiPeer.instance.send(object: "+$" + message, type: DataType.message.rawValue)
+                }
             }
         }
     
@@ -153,6 +155,8 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                 break
             case DataType.username.rawValue:
                 guard let username = data.convert() as? String else { return }
+                    
+                    print("Received: " + username)
                 nearbyUsers.append(username)
                 break
             default:
