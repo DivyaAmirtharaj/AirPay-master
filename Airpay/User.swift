@@ -13,7 +13,7 @@ class User {
     // MARK: Properties
     
     var name: String
-    var balance: Int
+    var balance: Double
     
     init?(name: String) {
         guard !name.isEmpty else {
@@ -24,7 +24,15 @@ class User {
         self.balance = 0
     }
     
-    func updateBalance(change: Int) {
+    public func addBalance(change: Double) {
         self.balance += change
+        print(self.balance)
     }
+    
+    public func subtractBalance(change: Double) {
+        self.balance -= change
+    }
+    public func getBalance() -> Double{
+           return(self.balance)
+       }
 }

@@ -10,9 +10,21 @@ import UIKit
 import MultiPeer
 
 enum DataType: UInt32 {
-    case message = 1
-    case image = 2
-    case username = 3
+    case initialRequest = 1 // requesting $x
+    case initialResponse = 2 // responding with username
+    case finalRequest = 3 // requesting $x from y usernames
+    case finalResponse = 4 // username accepts or declines request
+}
+
+extension String {
+
+  subscript (r: CountableClosedRange<Int>) -> String {
+    get {
+      let startIndex =  self.index(self.startIndex, offsetBy: r.lowerBound)
+      let endIndex = self.index(startIndex, offsetBy: r.upperBound - r.lowerBound)
+      return String(self[startIndex...endIndex])
+    }
+  }
 }
 
 
@@ -97,8 +109,8 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         if let message = textField.text {
             if let username = user?.name {
                 if !message.isEmpty {
-                    let obj = ["message": "-$" + message, "username": username]
-                MultiPeer.instance.send(object: obj, type: DataType.message.rawValue)
+                    let obj = ["message": "-$" + message, "requester": username]
+                MultiPeer.instance.send(object: obj, type: DataType.initialRequest.rawValue)
                 }
             }
         }
@@ -120,9 +132,9 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                if !message.isEmpty {
                     if let username = user?.name {
                         
-                        let obj = ["message": "+$" + message, "username": username]
+                        let obj = ["message": "+$" + message, "requester": username]
                         
-                MultiPeer.instance.send(object: obj, type: DataType.message.rawValue)
+                MultiPeer.instance.send(object: obj, type: DataType.initialRequest.rawValue)
                 }
             }
         }
@@ -149,17 +161,89 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     
     // MARK: Helpers
-    func sendUsername() {
+    func sendInitialResponse(requester: String) {
         if let username = user?.name {
-            MultiPeer.instance.send(object: username, type: DataType.username.rawValue)
+            
+            let obj = ["requester": requester,
+                       "responder": username] as [String : Any]
+            
+            MultiPeer.instance.send(object: obj, type: DataType.initialResponse.rawValue)
         }
     }
+    
+    func sendFinalRequest() {
+        let selectedUsers = nearbyUsers // TODO: change
+        
+        if let message = textField.text {
+               if !message.isEmpty {
+                    if let username = user?.name {
+                        
+                        let obj = ["message": "+$" + message, "requester": username,
+                                   "selectedUsers": selectedUsers] as [String : Any]
+                        
+                        
+                        print(obj)
+                        
+                MultiPeer.instance.send(object: obj, type: DataType.finalRequest.rawValue)
+                }
+            }
+        }
+        
+    }
+    
+    func sendFinalResponse(username: String, message: String) {
+         if let responder = user?.name {
+            
+            print("messageNumber: " + message[2...(message.count - 1)])
+            
+            let messageNumber = Double(message[2...(message.count - 1)])!
+            self.user?.subtractBalance(change: messageNumber)
+            
+            if let balanceText = self.user?.getBalance() {
+                print(balanceText)
+                self.balanceLabel.text = String(balanceText)
+            }
+            
+        
+            let obj = ["message": message, "requester": username, "responder": responder] as [String : String]
+            MultiPeer.instance.send(object: obj, type: DataType.finalResponse.rawValue)
+            
+        }
+        
+        
+    }
+    
+    
+    
     func showAlert(username: String, message: String) {
         let alertController = UIAlertController(title: "Hello", message:
             username + " requested " + message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
+        
+        let dismissAction = UIAlertAction(title: "Dismiss", style: .default) { (action) in
+            self.sendInitialResponse(requester: username)
+
+        }
+        
+    
+        alertController.addAction(dismissAction)
 
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func showRequestAlert(username: String, message: String) {
+        
+        print("gotta show request alert")
+        
+        let requestAlertController = UIAlertController(title: "Payment Request", message:
+            username + " requested " + message, preferredStyle: .alert)
+        let acceptAction = UIAlertAction(title: "Accept", style: .default) { (action) in
+            self.sendFinalResponse(username: username, message: message)
+        }
+        
+        requestAlertController.addAction(acceptAction)
+        requestAlertController.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
+
+        self.present(requestAlertController, animated: true, completion: nil)
     }
     
     }
@@ -169,21 +253,89 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         func multiPeer(didReceiveData data: Data, ofType type: UInt32) {
             switch type {
-            case DataType.message.rawValue:
+            case DataType.initialRequest.rawValue:
                 guard let message = data.convert() as? Dictionary<String, String> else { return }
                 textField.text = message["message"]
                 
-                showAlert(username: message["username"] ?? "Unknown user", message: message["message"] ?? "Unknown value")
+                showAlert(username: message["requester"] ?? "Unknown user", message: message["message"] ?? "Unknown value")
                 
-                sendUsername()
+                
                 
                 break
-            case DataType.username.rawValue:
-                guard let username = data.convert() as? String else { return }
+            case DataType.initialResponse.rawValue:
+                guard let message = data.convert() as? Dictionary<String, String> else { return }
+                
+                if let username = user?.name {
+                    if let requester = message["requester"] {
+                        if let responder = message["responder"] {
+                            if requester == username {
+                                showAlert(username: username, message: "RECEIVED " + responder)
+                                
+                                print("Received: " + responder)
+                                
+                                if !nearbyUsers.contains(responder) {
+                                    nearbyUsers.append(responder)
+                                }
+                                
+                                sendFinalRequest()
+                            }
+                            
+                        }
+                    }
                     
-                    print("Received: " + username)
-                nearbyUsers.append(username)
+                }
+                                
+                
+                    
+                    // TODO: Allow user to select which people to request
+                
+            
                 break
+            case DataType.finalRequest.rawValue:
+                guard let message = data.convert() as? Dictionary<String, AnyObject> else { return }
+                textField.text = message["message"] as? String
+                
+                
+                if let username = user?.name {
+                    let selectedUsers = message["selectedUsers"] as! [String]
+                    
+                    print(selectedUsers)
+                    
+                    if selectedUsers.contains(username) {
+                        showRequestAlert(username: message["requester"] as! String, message: message["message"] as! String)
+                    }
+                    
+                }
+                
+                
+                break
+            case DataType.finalResponse.rawValue:
+                guard let message = data.convert() as? Dictionary<String, String> else { return }
+                
+                print(message)
+                
+                textField.text = message["message"]
+                
+                if let username = user?.name {
+                    if let amount = message["message"] {
+                    if username == message["requester"] {
+                    
+                                    
+                        let amountNumber = Double(amount[2...(amount.count - 1)])!
+                        
+                        
+                        self.user?.addBalance(change: amountNumber)
+                        
+                        if let balanceText = self.user?.getBalance() {
+                            print(balanceText)
+                            self.balanceLabel.text = String(balanceText)
+                        }
+                        
+                        }
+                    }
+                    
+                }
+            
             default:
                 break
             }
