@@ -91,6 +91,11 @@
                                     <action selector="didPressPayButton:" destination="ge6-gk-5vN" eventType="touchUpInside" id="Mz1-rh-fAM"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vwN-zP-Wiq">
+                                <rect key="frame" x="13" y="382" width="374" height="206"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="7mw-Lq-1Jd"/>
@@ -101,6 +106,7 @@
                         <outlet property="nameLabel" destination="Nrt-G0-w5X" id="0sf-yB-diH"/>
                         <outlet property="payButton" destination="IaI-cs-8ql" id="ULs-Bs-iPw"/>
                         <outlet property="requestButton" destination="w8B-J7-d9K" id="G7S-Os-suX"/>
+                        <outlet property="tableView" destination="vwN-zP-Wiq" id="ci4-Jm-J0a"/>
                         <outlet property="textField" destination="zoc-C4-KJf" id="F4U-Bk-Jru"/>
                     </connections>
                 </viewController>

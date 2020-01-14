@@ -12,21 +12,27 @@ import MultiPeer
 enum DataType: UInt32 {
     case message = 1
     case image = 2
+    case username = 3
 }
 
 
 
-class PaymentViewController: UIViewController {
+class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: Properties
+    
+    // cell reuse id (cells that scroll out of view can be reused)
+    let cellReuseIdentifier = "cell"
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var requestButton: UIButton!
     @IBOutlet weak var payButton: UIButton!
+    @IBOutlet weak var tableView: UITableView!
     
     var user: User?
+    var nearbyUsers = [String]()
     
 
     override func viewDidLoad() {
@@ -45,6 +51,11 @@ class PaymentViewController: UIViewController {
         }
         
         textField.delegate = self
+    self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+
 
         MultiPeer.instance.delegate = self
 
@@ -81,6 +92,11 @@ class PaymentViewController: UIViewController {
             MultiPeer.instance.autoConnect()
             }
         
+        if let username = user?.name {
+            MultiPeer.instance.send(object: username, type: DataType.username.rawValue)
+        }
+        
+        
         if let message = textField.text {
             MultiPeer.instance.send(object: "-$" + message, type: DataType.message.rawValue)
             }
@@ -96,10 +112,34 @@ class PaymentViewController: UIViewController {
             MultiPeer.instance.autoConnect()
             }
         
+        if let username = user?.name {
+            MultiPeer.instance.send(object: username, type: DataType.username.rawValue)
+        }
+        
         if let message = textField.text {
             MultiPeer.instance.send(object: "+$" + message, type: DataType.message.rawValue)
             }
         }
+    
+    // MARK: Table View
+    
+    // number of rows in table view
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.nearbyUsers.count
+    }
+    
+    // create a cell for each table view row
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        // create a new cell if needed or reuse an old one
+        let cell:UITableViewCell = (tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell?)!
+
+        // set the text from the data model
+        cell.textLabel?.text = self.nearbyUsers[indexPath.row]
+
+        return cell
+    }
+    
     }
     
     
@@ -111,10 +151,15 @@ class PaymentViewController: UIViewController {
                 guard let message = data.convert() as? String else { return }
                 textField.text = message
                 break
-            
+            case DataType.username.rawValue:
+                guard let username = data.convert() as? String else { return }
+                nearbyUsers.append(username)
+                break
             default:
                 break
             }
+            
+            tableView.reloadData()
         }
 
         func multiPeer(connectedDevicesChanged devices: [String]) {
@@ -122,21 +167,6 @@ class PaymentViewController: UIViewController {
         }
     }
 
-    extension PaymentViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        func imagePickerController(_ picker: UIImagePickerController,
-                                   didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-    // Local variable inserted by Swift 4.2 migrator.
-    let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
-
-            
-            if let pickedImage = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage {
-               // imageView.image = pickedImage
-            }
-            
-            dismiss(animated: true, completion: nil)
-        }
-
-    }
 
     extension PaymentViewController: UITextFieldDelegate {
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -145,13 +175,4 @@ class PaymentViewController: UIViewController {
         }
     }
 
-    // Helper function inserted by Swift 4.2 migrator.
-    fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
-        return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
-    }
-
-    // Helper function inserted by Swift 4.2 migrator.
-    fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
-        return input.rawValue
-    }
 
