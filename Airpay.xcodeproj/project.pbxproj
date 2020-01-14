@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		615A99FC4224045361375835 /* Pods_Airpay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A57A7FB20E10690E10084D /* Pods_Airpay.framework */; };
 		7E3FDDC023CCEDD400DA09E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3FDDBF23CCEDD400DA09E6 /* AppDelegate.swift */; };
 		7E3FDDC223CCEDD400DA09E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3FDDC123CCEDD400DA09E6 /* SceneDelegate.swift */; };
 		7E3FDDC423CCEDD400DA09E6 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3FDDC323CCEDD400DA09E6 /* LoginViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		79930E16582640CF46457999 /* Pods-Airpay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Airpay.release.xcconfig"; path = "Target Support Files/Pods-Airpay/Pods-Airpay.release.xcconfig"; sourceTree = "<group>"; };
 		7E3FDDBC23CCEDD400DA09E6 /* Airpay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Airpay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E3FDDBF23CCEDD400DA09E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7E3FDDC123CCEDD400DA09E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -28,6 +30,8 @@
 		7E3FDDCD23CCEDD600DA09E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E3FDDD323CCF32600DA09E6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7E3FDDD523CCFDD700DA09E6 /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
+		A0A57A7FB20E10690E10084D /* Pods_Airpay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Airpay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5E6C95E276B3522AAFBE796 /* Pods-Airpay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Airpay.debug.xcconfig"; path = "Target Support Files/Pods-Airpay/Pods-Airpay.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,17 +39,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				615A99FC4224045361375835 /* Pods_Airpay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		333C31BB682472036339936B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A0A57A7FB20E10690E10084D /* Pods_Airpay.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7E3FDDB323CCEDD400DA09E6 = {
 			isa = PBXGroup;
 			children = (
 				7E3FDDBE23CCEDD400DA09E6 /* Airpay */,
 				7E3FDDBD23CCEDD400DA09E6 /* Products */,
+				A5C9759928BA7DAF4C35A791 /* Pods */,
+				333C31BB682472036339936B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -73,6 +88,16 @@
 			path = Airpay;
 			sourceTree = "<group>";
 		};
+		A5C9759928BA7DAF4C35A791 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E5E6C95E276B3522AAFBE796 /* Pods-Airpay.debug.xcconfig */,
+				79930E16582640CF46457999 /* Pods-Airpay.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -80,9 +105,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7E3FDDD023CCEDD600DA09E6 /* Build configuration list for PBXNativeTarget "Airpay" */;
 			buildPhases = (
+				B7A94D580AF581D6425DEFE7 /* [CP] Check Pods Manifest.lock */,
 				7E3FDDB823CCEDD400DA09E6 /* Sources */,
 				7E3FDDB923CCEDD400DA09E6 /* Frameworks */,
 				7E3FDDBA23CCEDD400DA09E6 /* Resources */,
+				427D3A32FF35151DA0249588 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -138,6 +165,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		427D3A32FF35151DA0249588 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Airpay/Pods-Airpay-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Airpay/Pods-Airpay-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Airpay/Pods-Airpay-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B7A94D580AF581D6425DEFE7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Airpay-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7E3FDDB823CCEDD400DA09E6 /* Sources */ = {
@@ -290,6 +359,7 @@
 		};
 		7E3FDDD123CCEDD600DA09E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E5E6C95E276B3522AAFBE796 /* Pods-Airpay.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -308,6 +378,7 @@
 		};
 		7E3FDDD223CCEDD600DA09E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79930E16582640CF46457999 /* Pods-Airpay.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

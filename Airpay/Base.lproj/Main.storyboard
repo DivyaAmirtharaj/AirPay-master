@@ -21,7 +21,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nh7-s9-Psd" colorLabel="IBBuiltInLabel-Red">
-                                <rect key="frame" x="340" y="473" width="62" height="30"/>
+                                <rect key="frame" x="332" y="473" width="62" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Continue"/>
                                 <connections>
@@ -69,6 +69,28 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zoc-C4-KJf">
+                                <rect key="frame" x="13" y="241" width="374" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w8B-J7-d9K">
+                                <rect key="frame" x="13" y="283" width="57" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Request"/>
+                                <connections>
+                                    <action selector="didPressRequestButton:" destination="ge6-gk-5vN" eventType="touchUpInside" id="OGn-LT-wkd"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IaI-cs-8ql">
+                                <rect key="frame" x="357" y="283" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Pay"/>
+                                <connections>
+                                    <action selector="didPressPayButton:" destination="ge6-gk-5vN" eventType="touchUpInside" id="Mz1-rh-fAM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="7mw-Lq-1Jd"/>
@@ -77,6 +99,9 @@
                     <connections>
                         <outlet property="balanceLabel" destination="GUS-bz-FSl" id="jDY-rx-Kuh"/>
                         <outlet property="nameLabel" destination="Nrt-G0-w5X" id="0sf-yB-diH"/>
+                        <outlet property="payButton" destination="IaI-cs-8ql" id="ULs-Bs-iPw"/>
+                        <outlet property="requestButton" destination="w8B-J7-d9K" id="G7S-Os-suX"/>
+                        <outlet property="textField" destination="zoc-C4-KJf" id="F4U-Bk-Jru"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zrs-zU-cUM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
