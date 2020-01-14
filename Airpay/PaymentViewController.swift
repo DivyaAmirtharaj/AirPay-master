@@ -32,7 +32,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     
     var user: User?
-    var nearbyUsers = ["sample1", "sample2"]
+    var nearbyUsers = [String]()
     
 
     override func viewDidLoad() {
@@ -92,13 +92,14 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             MultiPeer.instance.autoConnect()
             }
         
-        if let username = user?.name {
-            MultiPeer.instance.send(object: username, type: DataType.username.rawValue)
-        }
         
         
         if let message = textField.text {
-            if !message.isEmpty { MultiPeer.instance.send(object: "-$" + message, type: DataType.message.rawValue)
+            if let username = user?.name {
+                if !message.isEmpty {
+                    let obj = ["message": "-$" + message, "username": username]
+                MultiPeer.instance.send(object: obj, type: DataType.message.rawValue)
+                }
             }
         }
         
@@ -113,15 +114,19 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             MultiPeer.instance.autoConnect()
             }
         
-        if let username = user?.name {
-            MultiPeer.instance.send(object: username, type: DataType.username.rawValue)
-        }
+        
         
         if let message = textField.text {
-               if !message.isEmpty { MultiPeer.instance.send(object: "+$" + message, type: DataType.message.rawValue)
+               if !message.isEmpty {
+                    if let username = user?.name {
+                        
+                        let obj = ["message": "+$" + message, "username": username]
+                        
+                MultiPeer.instance.send(object: obj, type: DataType.message.rawValue)
                 }
             }
         }
+    }
     
     // MARK: Table View
     
@@ -142,6 +147,21 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         return cell
     }
     
+    
+    // MARK: Helpers
+    func sendUsername() {
+        if let username = user?.name {
+            MultiPeer.instance.send(object: username, type: DataType.username.rawValue)
+        }
+    }
+    func showAlert(username: String, message: String) {
+        let alertController = UIAlertController(title: "Hello", message:
+            username + " requested " + message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
+
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     }
     
     
@@ -150,8 +170,13 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         func multiPeer(didReceiveData data: Data, ofType type: UInt32) {
             switch type {
             case DataType.message.rawValue:
-                guard let message = data.convert() as? String else { return }
-                textField.text = message
+                guard let message = data.convert() as? Dictionary<String, String> else { return }
+                textField.text = message["message"]
+                
+                showAlert(username: message["username"] ?? "Unknown user", message: message["message"] ?? "Unknown value")
+                
+                sendUsername()
+                
                 break
             case DataType.username.rawValue:
                 guard let username = data.convert() as? String else { return }
