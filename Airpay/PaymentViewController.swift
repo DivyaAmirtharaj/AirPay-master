@@ -8,6 +8,7 @@
 
 import UIKit
 import MultiPeer
+import Stripe
 
 enum DataType: UInt32 {
     case initialRequest = 1 // requesting $x
@@ -30,7 +31,7 @@ extension String {
 
 
 
-class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate {
     
     // MARK: Properties
     
@@ -47,7 +48,12 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     var user: User?
     var nearbyUsers = [String]()
     
-
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Stripe.setDefaultPublishableKey("pk_test_Qw0haIYdMjpZwWVGPKolFtnt007eI4imFa")
+        // do any other necessary launch configuration
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,7 +82,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         MultiPeer.instance.autoConnect()
         
     }
-    
     
     // Dismiss keyboard on tap
       override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

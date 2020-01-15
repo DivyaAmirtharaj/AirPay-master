@@ -1,16 +1,20 @@
 PODS:
   - MultiPeer (0.1.0)
+  - Stripe (18.3.0)
 
 DEPENDENCIES:
   - MultiPeer
+  - Stripe
 
 SPEC REPOS:
   trunk:
     - MultiPeer
+    - Stripe
 
 SPEC CHECKSUMS:
   MultiPeer: 8be1b3b47faa9d2e94b4c8c29a2d984eb0d68007
+  Stripe: 35b9a54e698c82163d2ef105187a996d009fd386
 
-PODFILE CHECKSUM: 0a41b9991eff40977eb0977681cc94eefe5817de
+PODFILE CHECKSUM: 4c77820ba79aced78ba369ce7201d15eced3b793
 
 COCOAPODS: 1.8.4

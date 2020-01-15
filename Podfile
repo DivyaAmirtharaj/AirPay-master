@@ -7,5 +7,6 @@ target 'Airpay' do
 
   # Pods for Airpay
   pod "MultiPeer"
+  pod 'Stripe'
 
 end
