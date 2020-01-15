@@ -9,6 +9,7 @@
 import UIKit
 import MultiPeer
 
+
 enum DataType: UInt32 {
     case initialRequest = 1 // requesting $x
     case initialResponse = 2 // responding with username
@@ -32,8 +33,6 @@ extension String {
 class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: Properties
-    
-    // cell reuse id (cells that scroll out of view can be reused)
     let cellReuseIdentifier = "cell"
     
     @IBOutlet weak var nameLabel: UILabel!
@@ -41,10 +40,13 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var requestButton: UIButton!
     @IBOutlet weak var payButton: UIButton!
+    @IBOutlet weak var findUsersButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
+    
     
     var user: User?
     var nearbyUsers = [String]()
+    var selectedUsers = [String]()
     
 
     override func viewDidLoad() {
@@ -62,17 +64,27 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             balanceLabel.text = String(balanceText)
         }
         
-        textField.delegate = self
+        self.textField.delegate = self
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        
+        
+        
     self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         
-        tableView.delegate = self
-        tableView.dataSource = self
-
+        self.nearbyUsers.append("sample 1")
+        self.nearbyUsers.append("sample 2")
+        
+        self.tableView.reloadData()
+        
+        print(self.tableView.frame)
+        
 
         MultiPeer.instance.delegate = self
 
         MultiPeer.instance.initialize(serviceType: "sample-app")
         MultiPeer.instance.autoConnect()
+        
         
     }
     
@@ -90,14 +102,32 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     
     // MARK: Actions
-    
-    @IBAction func didPressLoadButton(_ sender: Any) {
 
-        }
-
+//
+//    @IBAction func didPressFindUsersButton(_ sender: Any) {
+//        print("FIND USERS")
+//
+//        // Device will stop advertising/browsing until after MultiPeer has sent data
+//        MultiPeer.instance.stopSearching()
+//
+//        defer {
+//            MultiPeer.instance.autoConnect()
+//            }
+//        
+//        // this is NOT WORKING
+//
+//        if let message = textField.text {
+//            if let username = user?.name {
+//                if !message.isEmpty {
+//                    let obj = ["requester": username, "message": message]
+//                MultiPeer.instance.send(object: obj, type: DataType.initialRequest.rawValue)
+//                }
+//            }
+//        }
+//
+//    }
+//
     @IBAction func didPressRequestButton(_ sender: Any) {
-        
-        // Device will stop advertising/browsing until after MultiPeer has sent data
         MultiPeer.instance.stopSearching()
         
         defer {
@@ -110,10 +140,11 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             if let username = user?.name {
                 if !message.isEmpty {
                     let obj = ["message": message, "requester": username]
-                MultiPeer.instance.send(object: obj, type: DataType.initialRequest.rawValue)
+                MultiPeer.instance.send(object: obj, type: DataType.finalRequest.rawValue)
                 }
             }
         }
+        
         
     }
     
@@ -142,23 +173,40 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: Table View
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+
+    
     // number of rows in table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("rows: " + String(self.nearbyUsers.count))
         return self.nearbyUsers.count
     }
     
     // create a cell for each table view row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         // create a new cell if needed or reuse an old one
-        let cell:UITableViewCell = (tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell?)!
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
+        
         // set the text from the data model
         cell.textLabel?.text = self.nearbyUsers[indexPath.row]
 
         return cell
     }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let selectedUser = nearbyUsers[indexPath.row]
+//
+//        if !selectedUsers.contains(selectedUser) {
+//            selectedUsers.append(selectedUser)
+//        }
+        
+  //  }
     
+
     
     // MARK: Helpers
     func sendInitialResponse(requester: String) {
@@ -171,9 +219,8 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
 
+
     func sendFinalRequest() {
-        let selectedUsers = nearbyUsers // TODO: change
-        
         if let message = textField.text {
                if !message.isEmpty {
                     if let username = user?.name {
@@ -215,21 +262,21 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     
     
-    func showAlert(username: String, message: String) {
-        let alertController = UIAlertController(title: "Initial", message:
-            username + " requested " + message, preferredStyle: .alert)
-        
-        let dismissAction = UIAlertAction(title: "Dismiss", style: .default) { (action) in
-            self.sendInitialResponse(requester: username)
+//    func showAlert(username: String, message: String) {
+//        let alertController = UIAlertController(title: "Initial", message:
+//            username + " requested " + message, preferredStyle: .alert)
+//
+//        let dismissAction = UIAlertAction(title: "Dismiss", style: .default) { (action) in
+//            self.sendInitialResponse(requester: username)
+//
+//        }
+//
+//
+//        alertController.addAction(dismissAction)
+//
+//        self.present(alertController, animated: true, completion: nil)
+//    }
 
-        }
-        
-    
-        alertController.addAction(dismissAction)
-
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
     func showRequestAlert(username: String, message: String) {
         
         print("gotta show request alert")
@@ -256,40 +303,38 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             switch type {
             case DataType.initialRequest.rawValue:
                 guard let message = data.convert() as? Dictionary<String, String> else { return }
-                textField.text = message["message"]
-                
-                showAlert(username: message["requester"] ?? "Unknown user", message: message["message"] ?? "Unknown value")
-                
+
+//                showAlert(username: message["requester"] ?? "Unknown user", message: message["message"] ?? "Unknown value")
+                self.sendInitialResponse(requester: message["requester"] ?? "Unknown user")
 
                 break
                 
             case DataType.initialResponse.rawValue:
                 guard let message = data.convert() as? Dictionary<String, String> else { return }
                 
-                if let username = user?.name {
-                    if let requester = message["requester"] {
-                        if let responder = message["responder"] {
-                            if requester == username {
-                                //showAlert(username: username, message: "RECEIVED " + responder)
-                                
-                                print("Received: " + responder)
-                                
-                                if !nearbyUsers.contains(responder) {
-                                    nearbyUsers.append(responder)
+                case DataType.initialResponse.rawValue:
+                    guard let message = data.convert() as? Dictionary<String, String> else { return }
+                    
+                    if let username = user?.name {
+                        if let requester = message["requester"] {
+                            if let responder = message["responder"] {
+                                if requester == username {
+                                    //showAlert(username: username, message: "RECEIVED " + responder)
+                                    
+                                    print("Received: " + responder)
+//
+//                                    if !nearbyUsers.contains(responder) {
+//                                        nearbyUsers.append(responder)
+//                                    }
+                                    
+                                    //sendFinalRequest()
                                 }
                                 
-                                sendFinalRequest()
                             }
-                            
                         }
+                        
                     }
-                    
-                }
-                                
-                
-                    
-                    // TODO: Allow user to select which people to request
-                
+
             
                 break
             case DataType.finalRequest.rawValue:
@@ -340,12 +385,14 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             default:
                 break
             }
-            
-            tableView.reloadData()
         }
 
         func multiPeer(connectedDevicesChanged devices: [String]) {
+            self.nearbyUsers += MultiPeer.instance.connectedDeviceNames; // TODO: Change
+            self.tableView.reloadData()
+            
             print("Connected devices changed: \(devices)")
+            print(self.nearbyUsers)
         }
     }
 
