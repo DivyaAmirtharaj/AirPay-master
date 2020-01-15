@@ -109,7 +109,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         if let message = textField.text {
             if let username = user?.name {
                 if !message.isEmpty {
-                    let obj = ["message": "-$" + message, "requester": username]
+                    let obj = ["message": message, "requester": username]
                 MultiPeer.instance.send(object: obj, type: DataType.initialRequest.rawValue)
                 }
             }
@@ -132,7 +132,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                if !message.isEmpty {
                     if let username = user?.name {
                         
-                        let obj = ["message": "+$" + message, "requester": username]
+                        let obj = ["message": message, "requester": username]
                         
                 MultiPeer.instance.send(object: obj, type: DataType.initialRequest.rawValue)
                 }
@@ -170,7 +170,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             MultiPeer.instance.send(object: obj, type: DataType.initialResponse.rawValue)
         }
     }
-    
+
     func sendFinalRequest() {
         let selectedUsers = nearbyUsers // TODO: change
         
@@ -178,7 +178,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                if !message.isEmpty {
                     if let username = user?.name {
                         
-                        let obj = ["message": "+$" + message, "requester": username,
+                        let obj = ["message": message, "requester": username,
                                    "selectedUsers": selectedUsers] as [String : Any]
                         
                         
@@ -194,9 +194,9 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     func sendFinalResponse(username: String, message: String) {
          if let responder = user?.name {
             
-            print("messageNumber: " + message[2...(message.count - 1)])
+            //print("messageNumber: " + message[1...(message.count) - 1])
             
-            let messageNumber = Double(message[2...(message.count - 1)])!
+            let messageNumber = Double(message)!
             self.user?.subtractBalance(change: messageNumber)
             
             if let balanceText = self.user?.getBalance() {
@@ -216,7 +216,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     
     func showAlert(username: String, message: String) {
-        let alertController = UIAlertController(title: "Hello", message:
+        let alertController = UIAlertController(title: "Initial", message:
             username + " requested " + message, preferredStyle: .alert)
         
         let dismissAction = UIAlertAction(title: "Dismiss", style: .default) { (action) in
@@ -233,6 +233,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     func showRequestAlert(username: String, message: String) {
         
         print("gotta show request alert")
+        print(message)
         
         let requestAlertController = UIAlertController(title: "Payment Request", message:
             username + " requested " + message, preferredStyle: .alert)
@@ -259,9 +260,9 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 showAlert(username: message["requester"] ?? "Unknown user", message: message["message"] ?? "Unknown value")
                 
-                
-                
+
                 break
+                
             case DataType.initialResponse.rawValue:
                 guard let message = data.convert() as? Dictionary<String, String> else { return }
                 
@@ -269,7 +270,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                     if let requester = message["requester"] {
                         if let responder = message["responder"] {
                             if requester == username {
-                                showAlert(username: username, message: "RECEIVED " + responder)
+                                //showAlert(username: username, message: "RECEIVED " + responder)
                                 
                                 print("Received: " + responder)
                                 
@@ -321,7 +322,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                     if username == message["requester"] {
                     
                                     
-                        let amountNumber = Double(amount[2...(amount.count - 1)])!
+                        let amountNumber = Double(amount)!
                         
                         
                         self.user?.addBalance(change: amountNumber)
@@ -355,5 +356,4 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             return true
         }
     }
-
 
