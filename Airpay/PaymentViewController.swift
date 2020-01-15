@@ -56,6 +56,8 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             print(nameText)
             
             nameLabel.text = nameText
+            
+            
         }
         
         if let balanceText = user?.balance {
@@ -67,23 +69,19 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.textField.delegate = self
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        self.tableView.allowsMultipleSelection = true
         
         
         
     self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         
-        self.nearbyUsers.append("sample 1")
-        self.nearbyUsers.append("sample 2")
-        
-        self.tableView.reloadData()
-        
-        print(self.tableView.frame)
-        
+                        
+        if let username = user?.name {
+            MultiPeer.instance.delegate = self
 
-        MultiPeer.instance.delegate = self
-
-        MultiPeer.instance.initialize(serviceType: "sample-app")
-        MultiPeer.instance.autoConnect()
+        MultiPeer.instance.initialize(serviceType: "sample-app", deviceName: username)
+            MultiPeer.instance.autoConnect()
+        }
         
         
     }
@@ -103,30 +101,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: Actions
 
-//
-//    @IBAction func didPressFindUsersButton(_ sender: Any) {
-//        print("FIND USERS")
-//
-//        // Device will stop advertising/browsing until after MultiPeer has sent data
-//        MultiPeer.instance.stopSearching()
-//
-//        defer {
-//            MultiPeer.instance.autoConnect()
-//            }
-//        
-//        // this is NOT WORKING
-//
-//        if let message = textField.text {
-//            if let username = user?.name {
-//                if !message.isEmpty {
-//                    let obj = ["requester": username, "message": message]
-//                MultiPeer.instance.send(object: obj, type: DataType.initialRequest.rawValue)
-//                }
-//            }
-//        }
-//
-//    }
-//
     @IBAction func didPressRequestButton(_ sender: Any) {
         MultiPeer.instance.stopSearching()
         
@@ -137,14 +111,19 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         
         if let message = textField.text {
-            if let username = user?.name {
-                if !message.isEmpty {
-                    let obj = ["message": message, "requester": username]
+               if !message.isEmpty {
+                    if let username = user?.name {
+                        
+                        let obj = ["message": message, "requester": username,
+                                   "selectedUsers": selectedUsers] as [String : Any]
+                        
+                        
+                        print(obj)
+                        
                 MultiPeer.instance.send(object: obj, type: DataType.finalRequest.rawValue)
                 }
             }
         }
-        
         
     }
     
@@ -181,7 +160,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // number of rows in table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("rows: " + String(self.nearbyUsers.count))
         return self.nearbyUsers.count
     }
     
@@ -196,15 +174,18 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         return cell
     }
-//
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let selectedUser = nearbyUsers[indexPath.row]
-//
-//        if !selectedUsers.contains(selectedUser) {
-//            selectedUsers.append(selectedUser)
-//        }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedUser = nearbyUsers[indexPath.row]
+
+        if !selectedUsers.contains(selectedUser) {
+            selectedUsers.append(selectedUser)
+        }
         
-  //  }
+        // TODO: let it stay selected
+        
+        print(selectedUsers)
+    }
     
 
     
@@ -220,28 +201,10 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
 
 
-    func sendFinalRequest() {
-        if let message = textField.text {
-               if !message.isEmpty {
-                    if let username = user?.name {
-                        
-                        let obj = ["message": message, "requester": username,
-                                   "selectedUsers": selectedUsers] as [String : Any]
-                        
-                        
-                        print(obj)
-                        
-                MultiPeer.instance.send(object: obj, type: DataType.finalRequest.rawValue)
-                }
-            }
-        }
-        
-    }
+
     
     func sendFinalResponse(username: String, message: String) {
          if let responder = user?.name {
-            
-            //print("messageNumber: " + message[1...(message.count) - 1])
             
             let messageNumber = Double(message)!
             self.user?.subtractBalance(change: messageNumber)
@@ -260,27 +223,9 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         
     }
     
-    
-    
-//    func showAlert(username: String, message: String) {
-//        let alertController = UIAlertController(title: "Initial", message:
-//            username + " requested " + message, preferredStyle: .alert)
-//
-//        let dismissAction = UIAlertAction(title: "Dismiss", style: .default) { (action) in
-//            self.sendInitialResponse(requester: username)
-//
-//        }
-//
-//
-//        alertController.addAction(dismissAction)
-//
-//        self.present(alertController, animated: true, completion: nil)
-//    }
 
     func showRequestAlert(username: String, message: String) {
         
-        print("gotta show request alert")
-        print(message)
         
         let requestAlertController = UIAlertController(title: "Payment Request", message:
             username + " requested " + message, preferredStyle: .alert)
@@ -301,49 +246,13 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         func multiPeer(didReceiveData data: Data, ofType type: UInt32) {
             switch type {
-            case DataType.initialRequest.rawValue:
-                guard let message = data.convert() as? Dictionary<String, String> else { return }
-
-//                showAlert(username: message["requester"] ?? "Unknown user", message: message["message"] ?? "Unknown value")
-                self.sendInitialResponse(requester: message["requester"] ?? "Unknown user")
-
-                break
-                
-            case DataType.initialResponse.rawValue:
-                guard let message = data.convert() as? Dictionary<String, String> else { return }
-                
-                case DataType.initialResponse.rawValue:
-                    guard let message = data.convert() as? Dictionary<String, String> else { return }
-                    
-                    if let username = user?.name {
-                        if let requester = message["requester"] {
-                            if let responder = message["responder"] {
-                                if requester == username {
-                                    //showAlert(username: username, message: "RECEIVED " + responder)
-                                    
-                                    print("Received: " + responder)
-//
-//                                    if !nearbyUsers.contains(responder) {
-//                                        nearbyUsers.append(responder)
-//                                    }
-                                    
-                                    //sendFinalRequest()
-                                }
-                                
-                            }
-                        }
-                        
-                    }
-
-            
-                break
             case DataType.finalRequest.rawValue:
                 guard let message = data.convert() as? Dictionary<String, AnyObject> else { return }
                 textField.text = message["message"] as? String
                 
                 
                 if let username = user?.name {
-                    let selectedUsers = message["selectedUsers"] as! [String]
+                    let selectedUsers = message["selectedUsers"] as! [String] // probably want to do this by IDs eventually lol
                     
                     print(selectedUsers)
                     
@@ -359,9 +268,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                 guard let message = data.convert() as? Dictionary<String, String> else { return }
                 
                 print(message)
-                
-                textField.text = message["message"]
-                
+                                
                 if let username = user?.name {
                     if let amount = message["message"] {
                     if username == message["requester"] {
@@ -388,11 +295,8 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
 
         func multiPeer(connectedDevicesChanged devices: [String]) {
-            self.nearbyUsers += MultiPeer.instance.connectedDeviceNames; // TODO: Change
+            self.nearbyUsers = MultiPeer.instance.connectedDeviceNames; //
             self.tableView.reloadData()
-            
-            print("Connected devices changed: \(devices)")
-            print(self.nearbyUsers)
         }
     }
 
