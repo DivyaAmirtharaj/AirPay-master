@@ -172,41 +172,28 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     func sendFinalRequest() {
         let selectedUsers = nearbyUsers // TODO: change
-        
         if let message = textField.text {
                if !message.isEmpty {
                     if let username = user?.name {
-                        
                         let obj = ["message": message, "requester": username,
                                    "selectedUsers": selectedUsers] as [String : Any]
-                        
-                        
                         print(obj)
-                        
                 MultiPeer.instance.send(object: obj, type: DataType.finalRequest.rawValue)
+                    }
                 }
-            }
         }
-        
     }
     
     func sendFinalResponse(username: String, message: String) {
-         if let responder = user?.name {
-            
-            //print("messageNumber: " + message[1...(message.count) - 1])
-            
+        if let responder = user?.name {
             let messageNumber = Double(message)!
             self.user?.subtractBalance(change: messageNumber)
-            
             if let balanceText = self.user?.getBalance() {
                 print(balanceText)
                 self.balanceLabel.text = String(balanceText)
             }
-            
-        
             let obj = ["message": message, "requester": username, "responder": responder] as [String : String]
             MultiPeer.instance.send(object: obj, type: DataType.finalResponse.rawValue)
-            
         }
     }
     
@@ -258,7 +245,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func payAlert(username: String, message: String) {
         let alertController = UIAlertController(title: "Payment Received", message:
-            username + " paid you " + message, preferredStyle: .alert)
+            username + " paid " + message, preferredStyle: .alert)
         
         let dismissAction = UIAlertAction(title: "Ok", style: .default) { (action) in
             self.payeeResponse(username: username, message: message)
