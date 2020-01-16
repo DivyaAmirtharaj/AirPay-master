@@ -1,4 +1,3 @@
-//
 //  PaymentController.swift
 //  Airpay
 //
@@ -9,6 +8,7 @@
 import UIKit
 import MultiPeer
 import Stripe
+import Alamofire
 
 enum DataType: UInt32 {
     case initialRequest = 1 // requesting $x
@@ -31,8 +31,8 @@ extension String {
 
 
 
-class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate {
-    
+class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate, UIResponder {
+
     // MARK: Properties
     
     // cell reuse id (cells that scroll out of view can be reused)
@@ -44,15 +44,41 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var requestButton: UIButton!
     @IBOutlet weak var payButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
-    
+            
     var user: User?
     var nearbyUsers = [String]()
+    var baseURLString: String? = nil
+    var baseURL: URL {
+        if let urlString = self.baseURLString, let url = URL(string: urlString) {
+            return url
+        } else {
+            fatalError()
+        }
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        Stripe.setDefaultPublishableKey("pk_test_Qw0haIYdMjpZwWVGPKolFtnt007eI4imFa")
+        STPPaymentConfiguration.shared().publishableKey = "pk_test_Qw0haIYdMjpZwWVGPKolFtnt007eI4imFa"
         // do any other necessary launch configuration
         return true
     }
+    
+    func createCustomerKey(withAPIVersion apiVersion: String, completion: @escaping STPJSONResponseCompletionBlock) {
+        let url = self.baseURL.appendingPathComponent("ephemeral_keys")
+        Alamofire.request(url, method: .post, parameters: [
+            "api_version": apiVersion,"customer_id": yourObject.id
+            ])
+            .validate(statusCode: 200..<300)
+            .responseJSON { responseJSON in
+                switch responseJSON.result {
+                case .success(let json):
+                    completion(json as? [String: AnyObject], nil)
+                case .failure(let error):
+                    completion(nil, error)
+                }
+        }
+    }
+    
+    //let customerContext = STPCustomerContext(keyProvider: MyAPIClient())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -250,7 +276,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func payAlert(username: String, message: String) {
         let alertController = UIAlertController(title: "Payment Received", message:
-            username + " paid " + message, preferredStyle: .alert)
+            username + " paid you " + message, preferredStyle: .alert)
         
         let dismissAction = UIAlertAction(title: "Ok", style: .default) { (action) in
             self.payeeResponse(username: username, message: message)
