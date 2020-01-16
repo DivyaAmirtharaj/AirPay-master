@@ -247,6 +247,44 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // MARK: Helpers
+    func paymentContext(_ paymentContext: STPPaymentContext, didUpdateShippingAddress address: STPAddress, completion: @escaping STPShippingMethodsCompletionBlock) {
+        let upsGround = PKShippingMethod()
+        upsGround.amount = 0
+        upsGround.label = "UPS Ground"
+        upsGround.detail = "Arrives in 3-5 days"
+        upsGround.identifier = "ups_ground"
+        let fedEx = PKShippingMethod()
+        fedEx.amount = 5.99
+        fedEx.label = "FedEx"
+        fedEx.detail = "Arrives tomorrow"
+        fedEx.identifier = "fedex"
+        if address.country == "US" {
+            completion(.valid, nil, [upsGround, fedEx], upsGround)
+        }
+        else {
+            completion(.invalid, nil, nil, nil)
+        }
+    }
+    
+    func paymentContext(_ paymentContext: STPPaymentContext,
+      didFinishWithStatus status: STPPaymentStatus,
+      error: Error?) {
+        switch status {
+        case .error:
+            self.showError(error)
+        case .success:
+            self.showReceipt()
+        case .userCancellation:
+            return // Do nothing
+        }
+    }
+    
+    func paymentContext(_ paymentContext: STPPaymentContext,
+      didFailToLoadWithError error: Error) {
+        self.navigationController?.popViewController(animated: true)
+        // Show the error to your user, etc.
+    }
+    
     func sendFinalRequest() {
         let selectedUsers = nearbyUsers // TODO: change
         if let message = textField.text {
