@@ -15,6 +15,8 @@ enum DataType: UInt32 {
     case initialResponse = 2 // responding with username
     case finalRequest = 3 // requesting $x from y usernames
     case finalResponse = 4 // username accepts or declines request
+    case payConfirm = 5 // payee is alerted of payment
+
 }
 
 extension String {
@@ -129,25 +131,25 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     @IBAction func didPressPayButton(_ sender: Any) {
         
-        // Device will stop advertising/browsing until after MultiPeer has sent data
+        // TODO: THE SELECTY THING
+        
+        /// Device will stop advertising/browsing until after MultiPeer has sent data
         MultiPeer.instance.stopSearching()
         
         defer {
             MultiPeer.instance.autoConnect()
             }
-        
-        
-        
+                
         if let message = textField.text {
                if !message.isEmpty {
                     if let username = user?.name {
                         
-                        let obj = ["message": message, "requester": username]
                         
-                MultiPeer.instance.send(object: obj, type: DataType.initialRequest.rawValue)
+                confirmAlert(username: username, message: message)
                 }
             }
         }
+
     }
     
     // MARK: Table View
@@ -181,27 +183,13 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         if !selectedUsers.contains(selectedUser) {
             selectedUsers.append(selectedUser)
         }
-        
-        // TODO: let it stay selected
-        
+            
         print(selectedUsers)
     }
     
 
     
     // MARK: Helpers
-    func sendInitialResponse(requester: String) {
-        if let username = user?.name {
-            
-            let obj = ["requester": requester,
-                       "responder": username] as [String : Any]
-            
-            MultiPeer.instance.send(object: obj, type: DataType.initialResponse.rawValue)
-        }
-    }
-
-
-
     
     func sendFinalResponse(username: String, message: String) {
          if let responder = user?.name {
@@ -222,6 +210,68 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         
     }
+    
+    func payResponse(username: String, message: String) {
+          if let username = user?.name {
+                         
+             let messageNumber = Double(message)!
+            self.user?.subtractBalance(change: (Double(self.selectedUsers.count) * messageNumber))
+             
+             if let balanceText = self.user?.getBalance() {
+                 print(balanceText)
+                 self.balanceLabel.text = String(balanceText)
+             }
+            
+            let obj = ["message": message, "requester": username, "selectedUsers": self.selectedUsers] as [String : Any]
+             MultiPeer.instance.send(object: obj, type: DataType.payConfirm.rawValue)
+             
+//             let obj = ["message": message, "requester": username, "responder": responder] as [String : String]
+//             MultiPeer.instance.send(object: obj, type: DataType.finalResponse.rawValue)
+             
+         }
+         
+         
+     }
+    
+     func payeeResponse(username: String, message: String) {
+          if let responder = user?.name {
+                         
+             let messageNumber = Double(message)!
+             self.user?.addBalance(change: messageNumber)
+             
+             if let balanceText = self.user?.getBalance() {
+                 print(balanceText)
+                 self.balanceLabel.text = String(balanceText)
+             }
+         }
+     }
+     
+     func confirmAlert(username: String, message: String) {
+         let alertController = UIAlertController(title: "Confirm Payment", message: "Confirm payment of " + message + " ?", preferredStyle: .alert)
+         let okAction = UIAlertAction(title: "Ok", style: .default) { (action) in
+             self.payResponse(username: username, message: message)
+            
+         }
+         alertController.addAction(okAction)
+         alertController.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
+
+
+         self.present(alertController, animated: true, completion: nil)
+     }
+     
+     func payAlert(username: String, message: String) {
+         let alertController = UIAlertController(title: "Payment Received", message:
+             username + " paid " + message, preferredStyle: .alert)
+         
+         let dismissAction = UIAlertAction(title: "Ok", style: .default) { (action) in
+             self.payeeResponse(username: username, message: message)
+
+         }
+         alertController.addAction(dismissAction)
+
+         self.present(alertController, animated: true, completion: nil)
+     }
+     
     
 
     func showRequestAlert(username: String, message: String) {
@@ -246,6 +296,24 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         func multiPeer(didReceiveData data: Data, ofType type: UInt32) {
             switch type {
+            case DataType.payConfirm.rawValue:
+                guard let message = data.convert() as? Dictionary<String, AnyObject> else { return }
+
+                
+                if let username = user?.name {
+                    let selectedUsers = message["selectedUsers"] as! [String] // probably want to do this by IDs eventually lol
+                    
+                    print(selectedUsers)
+                    
+                    if selectedUsers.contains(username) {
+                    
+                        payAlert(username: message["requester"] as! String, message: message["message"] as! String)
+                        }
+                    
+                }
+                    
+                    break
+                
             case DataType.finalRequest.rawValue:
                 guard let message = data.convert() as? Dictionary<String, AnyObject> else { return }
                 textField.text = message["message"] as? String
