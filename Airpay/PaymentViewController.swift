@@ -30,9 +30,27 @@ extension String {
   }
 }
 
+extension SetPaymentController: STPPaymentContextDelegate {
+  func paymentContext(_ paymentContext: STPPaymentContext, didFailToLoadWithError error: Error) {
+    
+  }
+  
+  func paymentContextDidChange(_ paymentContext: STPPaymentContext) {
+    
+  }
+  
+  func paymentContext(_ paymentContext: STPPaymentContext, didCreatePaymentResult paymentResult: STPPaymentResult, completion: @escaping STPErrorBlock) {
+    
+  }
+  
+  func paymentContext(_ paymentContext: STPPaymentContext, didFinishWith status: STPPaymentStatus, error: Error?) {
+    
+  }
+}
 
 
-class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate, UIResponder {
+
+class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate {
 
     // MARK: Properties
     
@@ -80,6 +98,12 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
         }
     }
+    let customerContext = STPCustomerContext(keyProvider: MyAPIClient())
+    
+    self.paymentContext = STPPaymentContext(customerContext: customerContext)
+    self.paymentContext.paymentAmount = 5000
+    self.paymentContext.delegate = self
+    self.paymentContext.hostViewController = self
     
     
     override func viewDidLoad() {
@@ -130,6 +154,16 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     
     // MARK: Actions
+    
+    @IBAction func didSelectPaymentOption(_ sender: Any) {
+        self.paymentContext.pushPaymentOptionsViewController()
+    }
+    @IBAction func didSelectShippingOption(_ sender: Any) {
+        paymentContext.presentShippingViewController()
+    }
+    @IBAction func didTapOnPayment(_ sender: Any) {
+        paymentContext.requestPayment()
+    }
 
     @IBAction func didPressRequestButton(_ sender: Any) {
         
