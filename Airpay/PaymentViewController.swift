@@ -8,7 +8,7 @@
 
 import UIKit
 import MultiPeer
-
+import Stripe
 
 enum DataType: UInt32 {
     case initialRequest = 1 // requesting $x
@@ -16,7 +16,6 @@ enum DataType: UInt32 {
     case finalRequest = 3 // requesting $x from y usernames
     case finalResponse = 4 // username accepts or declines request
     case payConfirm = 5 // payee is alerted of payment
-
 }
 
 extension String {
@@ -32,9 +31,11 @@ extension String {
 
 
 
-class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate {
     
     // MARK: Properties
+    
+    // cell reuse id (cells that scroll out of view can be reused)
     let cellReuseIdentifier = "cell"
     
     @IBOutlet weak var nameLabel: UILabel!
@@ -42,7 +43,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var requestButton: UIButton!
     @IBOutlet weak var payButton: UIButton!
-    @IBOutlet weak var findUsersButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
     
@@ -50,7 +50,13 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     var nearbyUsers = [String]()
     var selectedUsers = [String]()
     
-
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Stripe.setDefaultPublishableKey("pk_test_Qw0haIYdMjpZwWVGPKolFtnt007eI4imFa")
+        // do any other necessary launch configuration
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,8 +64,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             print(nameText)
             
             nameLabel.text = nameText
-            
-            
         }
         
         if let balanceText = user?.balance {
@@ -68,6 +72,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             balanceLabel.text = String(balanceText)
         }
         
+
         self.textField.delegate = self
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -85,9 +90,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             MultiPeer.instance.autoConnect()
         }
         
-        
     }
-    
     
     // Dismiss keyboard on tap
       override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -104,6 +107,8 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: Actions
 
     @IBAction func didPressRequestButton(_ sender: Any) {
+        
+        // Device will stop advertising/browsing until after MultiPeer has sent data
         MultiPeer.instance.stopSearching()
         
         defer {
@@ -123,6 +128,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                         print(obj)
                         
                 MultiPeer.instance.send(object: obj, type: DataType.finalRequest.rawValue)
+
                 }
             }
         }
@@ -130,10 +136,8 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @IBAction func didPressPayButton(_ sender: Any) {
-        
-        // TODO: THE SELECTY THING
-        
-        /// Device will stop advertising/browsing until after MultiPeer has sent data
+
+        // Device will stop advertising/browsing until after MultiPeer has sent data
         MultiPeer.instance.stopSearching()
         
         defer {
@@ -159,7 +163,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         return 1
     }
 
-    
+
     // number of rows in table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.nearbyUsers.count
@@ -187,28 +191,34 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         print(selectedUsers)
     }
     
-
     
     // MARK: Helpers
+
+    func sendFinalRequest() {
+        let selectedUsers = nearbyUsers // TODO: change
+        if let message = textField.text {
+               if !message.isEmpty {
+                    if let username = user?.name {
+                        let obj = ["message": message, "requester": username,
+                                   "selectedUsers": selectedUsers] as [String : Any]
+                        print(obj)
+                MultiPeer.instance.send(object: obj, type: DataType.finalRequest.rawValue)
+                    }
+                }
+        }
+    }
     
     func sendFinalResponse(username: String, message: String) {
-         if let responder = user?.name {
-            
+        if let responder = user?.name {
             let messageNumber = Double(message)!
             self.user?.subtractBalance(change: messageNumber)
-            
             if let balanceText = self.user?.getBalance() {
                 print(balanceText)
                 self.balanceLabel.text = String(balanceText)
             }
-            
-        
             let obj = ["message": message, "requester": username, "responder": responder] as [String : String]
             MultiPeer.instance.send(object: obj, type: DataType.finalResponse.rawValue)
-            
         }
-        
-        
     }
     
     func payResponse(username: String, message: String) {
@@ -225,8 +235,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             let obj = ["message": message, "requester": username, "selectedUsers": self.selectedUsers] as [String : Any]
              MultiPeer.instance.send(object: obj, type: DataType.payConfirm.rawValue)
              
-//             let obj = ["message": message, "requester": username, "responder": responder] as [String : String]
-//             MultiPeer.instance.send(object: obj, type: DataType.finalResponse.rawValue)
              
          }
          
@@ -234,16 +242,14 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
      }
     
      func payeeResponse(username: String, message: String) {
-          if let responder = user?.name {
-                         
-             let messageNumber = Double(message)!
-             self.user?.addBalance(change: messageNumber)
-             
-             if let balanceText = self.user?.getBalance() {
-                 print(balanceText)
-                 self.balanceLabel.text = String(balanceText)
-             }
+         let messageNumber = Double(message)!
+         self.user?.addBalance(change: messageNumber)
+         
+         if let balanceText = self.user?.getBalance() {
+             print(balanceText)
+             self.balanceLabel.text = String(balanceText)
          }
+         
      }
      
      func confirmAlert(username: String, message: String) {
@@ -274,9 +280,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
      
     
 
-    func showRequestAlert(username: String, message: String) {
-        
-        
+    func showRequestAlert(username: String, message: String){
         let requestAlertController = UIAlertController(title: "Payment Request", message:
             username + " requested " + message, preferredStyle: .alert)
         let acceptAction = UIAlertAction(title: "Accept", style: .default) { (action) in
@@ -316,12 +320,11 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
             case DataType.finalRequest.rawValue:
                 guard let message = data.convert() as? Dictionary<String, AnyObject> else { return }
-                textField.text = message["message"] as? String
                 
                 
                 if let username = user?.name {
                     let selectedUsers = message["selectedUsers"] as! [String] // probably want to do this by IDs eventually lol
-                    
+
                     print(selectedUsers)
                     
                     if selectedUsers.contains(username) {
@@ -335,8 +338,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             case DataType.finalResponse.rawValue:
                 guard let message = data.convert() as? Dictionary<String, String> else { return }
                 
-                print(message)
-                                
                 if let username = user?.name {
                     if let amount = message["message"] {
                     if username == message["requester"] {
@@ -365,6 +366,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         func multiPeer(connectedDevicesChanged devices: [String]) {
             self.nearbyUsers = MultiPeer.instance.connectedDeviceNames; //
             self.tableView.reloadData()
+
         }
     }
 

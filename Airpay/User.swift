@@ -21,7 +21,8 @@ class User {
         }
         
         self.name = name
-        self.balance = 0
+        self.balance = 0.00
+
     }
     
     public func addBalance(change: Double) {
