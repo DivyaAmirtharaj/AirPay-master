@@ -1,4 +1,4 @@
-//
+
 //  PaymentController.swift
 //  Airpay
 //
@@ -9,6 +9,7 @@
 import UIKit
 import MultiPeer
 import Stripe
+import Alamofire
 
 enum DataType: UInt32 {
     case initialRequest = 1 // requesting $x
@@ -31,8 +32,7 @@ extension String {
 
 
 
-class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate {
-    
+class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate, UIResponder {
     // MARK: Properties
     
     // cell reuse id (cells that scroll out of view can be reused)
@@ -45,17 +45,43 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var payButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
-    
     var user: User?
     var nearbyUsers = [String]()
     var selectedUsers = [String]()
     
+
+
+    var baseURLString: String? = nil
+    var baseURL: URL {
+        if let urlString = self.baseURLString, let url = URL(string: urlString) {
+            return url
+        } else {
+            fatalError()
+        }
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        Stripe.setDefaultPublishableKey("pk_test_Qw0haIYdMjpZwWVGPKolFtnt007eI4imFa")
+        STPPaymentConfiguration.shared().publishableKey = "pk_test_Qw0haIYdMjpZwWVGPKolFtnt007eI4imFa"
         // do any other necessary launch configuration
         return true
     }
+    
+    func createCustomerKey(withAPIVersion apiVersion: String, completion: @escaping STPJSONResponseCompletionBlock) {
+        let url = self.baseURL.appendingPathComponent("ephemeral_keys")
+        Alamofire.request(url, method: .post, parameters: [
+            "api_version": apiVersion,"customer_id": yourObject.id
+            ])
+            .validate(statusCode: 200..<300)
+            .responseJSON { responseJSON in
+                switch responseJSON.result {
+                case .success(let json):
+                    completion(json as? [String: AnyObject], nil)
+                case .failure(let error):
+                    completion(nil, error)
+                }
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +98,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             balanceLabel.text = String(balanceText)
         }
         
+
 
         self.textField.delegate = self
         self.tableView.delegate = self
@@ -106,6 +133,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: Actions
 
+
     @IBAction func didPressRequestButton(_ sender: Any) {
         
         // Device will stop advertising/browsing until after MultiPeer has sent data
@@ -128,7 +156,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                         print(obj)
                         
                 MultiPeer.instance.send(object: obj, type: DataType.finalRequest.rawValue)
-
                 }
             }
         }
@@ -136,7 +163,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @IBAction func didPressPayButton(_ sender: Any) {
-
         // Device will stop advertising/browsing until after MultiPeer has sent data
         MultiPeer.instance.stopSearching()
         
@@ -171,7 +197,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // create a cell for each table view row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         // create a new cell if needed or reuse an old one
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
         
@@ -188,8 +213,8 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             selectedUsers.append(selectedUser)
         }
             
-        print(selectedUsers)
     }
+    
     
     
     // MARK: Helpers
@@ -279,8 +304,24 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
      }
      
     
+    
+    func showAlert(username: String, message: String) {
+        let alertController = UIAlertController(title: "Initial", message:
+            username + " requested " + message, preferredStyle: .alert)
+        
+        let dismissAction = UIAlertAction(title: "Dismiss", style: .default) { (action) in
+            self.sendInitialResponse(requester: username)
 
-    func showRequestAlert(username: String, message: String){
+        }
+        
+    
+        alertController.addAction(dismissAction)
+
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func showRequestAlert(username: String, message: String) {
+        
         let requestAlertController = UIAlertController(title: "Payment Request", message:
             username + " requested " + message, preferredStyle: .alert)
         let acceptAction = UIAlertAction(title: "Accept", style: .default) { (action) in
@@ -325,7 +366,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                 if let username = user?.name {
                     let selectedUsers = message["selectedUsers"] as! [String] // probably want to do this by IDs eventually lol
 
-                    print(selectedUsers)
                     
                     if selectedUsers.contains(username) {
                         showRequestAlert(username: message["requester"] as! String, message: message["message"] as! String)

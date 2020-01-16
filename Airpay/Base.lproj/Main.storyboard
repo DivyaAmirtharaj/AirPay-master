@@ -22,6 +22,7 @@
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nh7-s9-Psd" colorLabel="IBBuiltInLabel-Red">
                                 <rect key="frame" x="332" y="501" width="62" height="30"/>
+
                                 <state key="normal" title="Continue"/>
                                 <connections>
                                     <action selector="onContinueButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Kdh-eW-0fF"/>
@@ -110,6 +111,7 @@
                                     <action selector="didPressRequestButton:" destination="ge6-gk-5vN" eventType="touchUpInside" id="OGn-LT-wkd"/>
                                 </connections>
                             </button>
+
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IaI-cs-8ql">
                                 <rect key="frame" x="20" y="707" width="374" height="40"/>
                                 <state key="normal" title="Pay"/>
@@ -117,6 +119,7 @@
                                     <action selector="didPressPayButton:" destination="ge6-gk-5vN" eventType="touchUpInside" id="Mz1-rh-fAM"/>
                                 </connections>
                             </button>
+
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -143,6 +146,7 @@
                             <constraint firstItem="w8B-J7-d9K" firstAttribute="leading" secondItem="7mw-Lq-1Jd" secondAttribute="leading" constant="20" id="txg-sn-d7m"/>
                             <constraint firstItem="GUS-bz-FSl" firstAttribute="leading" secondItem="7mw-Lq-1Jd" secondAttribute="leading" constant="20" id="wc0-UL-e9r"/>
                         </constraints>
+
                         <viewLayoutGuide key="safeArea" id="7mw-Lq-1Jd"/>
                     </view>
                     <navigationItem key="navigationItem" id="xG0-zg-fQf"/>
@@ -151,6 +155,7 @@
                         <outlet property="nameLabel" destination="Nrt-G0-w5X" id="0sf-yB-diH"/>
                         <outlet property="payButton" destination="IaI-cs-8ql" id="ULs-Bs-iPw"/>
                         <outlet property="requestButton" destination="w8B-J7-d9K" id="G7S-Os-suX"/>
+
                         <outlet property="tableView" destination="uY3-ZC-BIv" id="cih-He-KFV"/>
                         <outlet property="textField" destination="zoc-C4-KJf" id="F4U-Bk-Jru"/>
                     </connections>
