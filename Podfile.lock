@@ -1,20 +1,24 @@
 PODS:
+  - Alamofire (3.0.1)
   - MultiPeer (0.1.0)
   - Stripe (18.4.0)
 
 DEPENDENCIES:
+  - Alamofire (~> 3.0.0)
   - MultiPeer
   - Stripe
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - MultiPeer
     - Stripe
 
 SPEC CHECKSUMS:
+  Alamofire: 2457e1b2e6c46bb05c3a598c542b7bfd08893775
   MultiPeer: 8be1b3b47faa9d2e94b4c8c29a2d984eb0d68007
   Stripe: fa837c60f0644b488c994024ce7d9b001ea4e97c
 
-PODFILE CHECKSUM: 47fd4c3345cf418249846042c43f4128a5ebc85c
+PODFILE CHECKSUM: ba9f2ddc89717a1a15037c06715937d42a3dd24e
 
 COCOAPODS: 1.8.4

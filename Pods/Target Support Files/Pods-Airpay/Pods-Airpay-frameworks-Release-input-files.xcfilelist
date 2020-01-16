@@ -1,3 +1,4 @@
 ${PODS_ROOT}/Target Support Files/Pods-Airpay/Pods-Airpay-frameworks.sh
+${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
 ${BUILT_PRODUCTS_DIR}/MultiPeer/MultiPeer.framework
 ${BUILT_PRODUCTS_DIR}/Stripe/Stripe.framework
