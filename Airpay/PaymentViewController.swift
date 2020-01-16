@@ -296,22 +296,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
 
          self.present(alertController, animated: true, completion: nil)
      }
-     
     
-    func showAlert(username: String, message: String) {
-        let alertController = UIAlertController(title: "Initial", message:
-            username + " requested " + message, preferredStyle: .alert)
-        
-        let dismissAction = UIAlertAction(title: "Dismiss", style: .default) { (action) in
-            self.sendInitialResponse(requester: username)
-
-        }
-        
-    
-        alertController.addAction(dismissAction)
-
-        self.present(alertController, animated: true, completion: nil)
-    }
     
     func showRequestAlert(username: String, message: String) {
         let requestAlertController = UIAlertController(title: "Payment Request", message:

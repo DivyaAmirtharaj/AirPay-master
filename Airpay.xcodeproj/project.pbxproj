@@ -16,6 +16,7 @@
 		7E3FDDCC23CCEDD600DA09E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E3FDDCA23CCEDD600DA09E6 /* LaunchScreen.storyboard */; };
 		7E3FDDD423CCF32600DA09E6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3FDDD323CCF32600DA09E6 /* User.swift */; };
 		7E3FDDD623CCFDD700DA09E6 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3FDDD523CCFDD700DA09E6 /* PaymentViewController.swift */; };
+		7E73A0E123D1224A0029A530 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E73A0E023D1224A0029A530 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		7E3FDDCD23CCEDD600DA09E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E3FDDD323CCF32600DA09E6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7E3FDDD523CCFDD700DA09E6 /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
+		7E73A0E023D1224A0029A530 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A0A57A7FB20E10690E10084D /* Pods_Airpay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Airpay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5E6C95E276B3522AAFBE796 /* Pods-Airpay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Airpay.debug.xcconfig"; path = "Target Support Files/Pods-Airpay/Pods-Airpay.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,6 +86,7 @@
 				7E3FDDC823CCEDD600DA09E6 /* Assets.xcassets */,
 				7E3FDDCA23CCEDD600DA09E6 /* LaunchScreen.storyboard */,
 				7E3FDDCD23CCEDD600DA09E6 /* Info.plist */,
+				7E73A0E023D1224A0029A530 /* GoogleService-Info.plist */,
 			);
 			path = Airpay;
 			sourceTree = "<group>";
@@ -158,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E3FDDCC23CCEDD600DA09E6 /* LaunchScreen.storyboard in Resources */,
+				7E73A0E123D1224A0029A530 /* GoogleService-Info.plist in Resources */,
 				7E3FDDC923CCEDD600DA09E6 /* Assets.xcassets in Resources */,
 				7E3FDDC723CCEDD400DA09E6 /* Main.storyboard in Resources */,
 			);

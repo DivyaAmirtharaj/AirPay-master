@@ -1,13 +1,15 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '13.1'
 
 target 'Airpay' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
   # Pods for Airpay
-  pod "MultiPeer"
+  pod 'MultiPeer'
   pod 'Stripe'
-  pod ‘Alamofire’, ‘~> 3.0.0’
+  pod 'Alamofire'
+  pod 'Firebase/Analytics'
+
 
 end
