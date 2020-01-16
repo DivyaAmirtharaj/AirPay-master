@@ -33,6 +33,7 @@ extension String {
 
 
 class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate, UIResponder {
+
     // MARK: Properties
     
     // cell reuse id (cells that scroll out of view can be reused)
@@ -49,8 +50,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     var nearbyUsers = [String]()
     var selectedUsers = [String]()
     
-
-
     var baseURLString: String? = nil
     var baseURL: URL {
         if let urlString = self.baseURLString, let url = URL(string: urlString) {
@@ -116,7 +115,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         MultiPeer.instance.initialize(serviceType: "sample-app", deviceName: username)
             MultiPeer.instance.autoConnect()
         }
-        
     }
     
     // Dismiss keyboard on tap
@@ -132,7 +130,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     
     // MARK: Actions
-
 
     @IBAction func didPressRequestButton(_ sender: Any) {
         
@@ -156,10 +153,10 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                         print(obj)
                         
                 MultiPeer.instance.send(object: obj, type: DataType.finalRequest.rawValue)
-                }
+                
             }
         }
-        
+        }
     }
     
     @IBAction func didPressPayButton(_ sender: Any) {
@@ -215,10 +212,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             
     }
     
-    
-    
     // MARK: Helpers
-
     func sendFinalRequest() {
         let selectedUsers = nearbyUsers // TODO: change
         if let message = textField.text {
@@ -304,7 +298,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
      }
      
     
-    
     func showAlert(username: String, message: String) {
         let alertController = UIAlertController(title: "Initial", message:
             username + " requested " + message, preferredStyle: .alert)
@@ -321,7 +314,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func showRequestAlert(username: String, message: String) {
-        
         let requestAlertController = UIAlertController(title: "Payment Request", message:
             username + " requested " + message, preferredStyle: .alert)
         let acceptAction = UIAlertAction(title: "Accept", style: .default) { (action) in
@@ -333,8 +325,9 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         self.present(requestAlertController, animated: true, completion: nil)
     }
+}
     
-    }
+    
     
     
     extension PaymentViewController: MultiPeerDelegate {
@@ -365,7 +358,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 if let username = user?.name {
                     let selectedUsers = message["selectedUsers"] as! [String] // probably want to do this by IDs eventually lol
-
                     
                     if selectedUsers.contains(username) {
                         showRequestAlert(username: message["requester"] as! String, message: message["message"] as! String)
@@ -377,7 +369,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                 break
             case DataType.finalResponse.rawValue:
                 guard let message = data.convert() as? Dictionary<String, String> else { return }
-                
+
                 if let username = user?.name {
                     if let amount = message["message"] {
                     if username == message["requester"] {
@@ -406,7 +398,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         func multiPeer(connectedDevicesChanged devices: [String]) {
             self.nearbyUsers = MultiPeer.instance.connectedDeviceNames; //
             self.tableView.reloadData()
-
         }
     }
 
