@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Firebase
 import Stripe
 
 @UIApplicationMain
@@ -23,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     internal func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        FirebaseApp.configure()
         return true
     }
 

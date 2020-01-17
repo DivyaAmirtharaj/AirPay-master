@@ -9,7 +9,6 @@
 import UIKit
 import MultiPeer
 import Stripe
-import Alamofire
 
 enum DataType: UInt32 {
     case initialRequest = 1 // requesting $x
@@ -57,7 +56,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    let customerContext = STPCustomerContext(keyProvider: MyAPIClient())
     
     override func viewDidLoad() {
         super.viewDidLoad()

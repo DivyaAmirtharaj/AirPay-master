@@ -11,7 +11,6 @@
 		25856ADE23D15CC300738118 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25856ADD23D15CC300738118 /* Buttons.swift */; };
 		25856AE023D15CF200738118 /* CheckoutRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25856ADF23D15CF200738118 /* CheckoutRowView.swift */; };
 		25856AE223D1614A00738118 /* CheckoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25856AE123D1614A00738118 /* CheckoutViewController.swift */; };
-		25856AE423D251CB00738118 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 25856AE323D251CB00738118 /* GoogleService-Info.plist */; };
 		25856AE623D252E200738118 /* MyFakeAPIClien.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25856AE523D252E200738118 /* MyFakeAPIClien.swift */; };
 		615A99FC4224045361375835 /* Pods_Airpay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A57A7FB20E10690E10084D /* Pods_Airpay.framework */; };
 		7E3FDDC023CCEDD400DA09E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3FDDBF23CCEDD400DA09E6 /* AppDelegate.swift */; };
@@ -29,7 +28,6 @@
 		25856ADD23D15CC300738118 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		25856ADF23D15CF200738118 /* CheckoutRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutRowView.swift; sourceTree = "<group>"; };
 		25856AE123D1614A00738118 /* CheckoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewController.swift; sourceTree = "<group>"; };
-		25856AE323D251CB00738118 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		25856AE523D252E200738118 /* MyFakeAPIClien.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFakeAPIClien.swift; sourceTree = "<group>"; };
 		79930E16582640CF46457999 /* Pods-Airpay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Airpay.release.xcconfig"; path = "Target Support Files/Pods-Airpay/Pods-Airpay.release.xcconfig"; sourceTree = "<group>"; };
 		7E3FDDBC23CCEDD400DA09E6 /* Airpay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Airpay.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,7 +98,6 @@
 				7E3FDDC823CCEDD600DA09E6 /* Assets.xcassets */,
 				7E3FDDCA23CCEDD600DA09E6 /* LaunchScreen.storyboard */,
 				7E3FDDCD23CCEDD600DA09E6 /* Info.plist */,
-				25856AE323D251CB00738118 /* GoogleService-Info.plist */,
 				25856ADF23D15CF200738118 /* CheckoutRowView.swift */,
 			);
 			path = Airpay;
@@ -176,7 +173,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E3FDDCC23CCEDD600DA09E6 /* LaunchScreen.storyboard in Resources */,
-				25856AE423D251CB00738118 /* GoogleService-Info.plist in Resources */,
 				7E3FDDC923CCEDD600DA09E6 /* Assets.xcassets in Resources */,
 				7E3FDDC723CCEDD400DA09E6 /* Main.storyboard in Resources */,
 			);
