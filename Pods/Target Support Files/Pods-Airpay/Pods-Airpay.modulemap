@@ -1,6 +1,0 @@
-framework module Pods_Airpay {
-  umbrella header "Pods-Airpay-umbrella.h"
-
-  export *
-  module * { export * }
-}
