@@ -69,9 +69,7 @@ class CheckoutViewController: UIViewController {
                 print("ANDIOOP2")
                 return
             }
-            
-            let amount = Double(amountText)
-            
+                        
             let session = URLSession.shared
 
             guard let url = URL(string: "https://frozen-coast-06188.herokuapp.com/charge") else {
@@ -83,11 +81,11 @@ class CheckoutViewController: UIViewController {
             request.httpMethod = "POST"
             
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
             request.setValue("Powered by Swift!", forHTTPHeaderField: "X-Powered-By")
             
             let json = [
-                "amount": amount!,
-                "currency": "USD",
+                "amount": amountText,
                 "stripeToken": tokenID,
                 "description": "Adding to Airpay balance"
                 ] as [String : Any]
@@ -95,6 +93,8 @@ class CheckoutViewController: UIViewController {
             print(json)
             
             let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
+            
+
             
             request.httpBody = jsonData
             
