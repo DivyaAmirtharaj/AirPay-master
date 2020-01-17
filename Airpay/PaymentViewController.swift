@@ -30,25 +30,6 @@ extension String {
   }
 }
 
-extension SetPaymentController: STPPaymentContextDelegate {
-  func paymentContext(_ paymentContext: STPPaymentContext, didFailToLoadWithError error: Error) {
-    
-  }
-  
-  func paymentContextDidChange(_ paymentContext: STPPaymentContext) {
-    
-  }
-  
-  func paymentContext(_ paymentContext: STPPaymentContext, didCreatePaymentResult paymentResult: STPPaymentResult, completion: @escaping STPErrorBlock) {
-    
-  }
-  
-  func paymentContext(_ paymentContext: STPPaymentContext, didFinishWith status: STPPaymentStatus, error: Error?) {
-    
-  }
-}
-
-
 
 class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate {
 
@@ -82,28 +63,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         // do any other necessary launch configuration
         return true
     }
-    
-    func createCustomerKey(withAPIVersion apiVersion: String, completion: @escaping STPJSONResponseCompletionBlock) {
-        let url = self.baseURL.appendingPathComponent("ephemeral_keys")
-        Alamofire.request(url, method: .post, parameters: [
-            "api_version": apiVersion,"customer_id": yourObject.id
-            ])
-            .validate(statusCode: 200..<300)
-            .responseJSON { responseJSON in
-                switch responseJSON.result {
-                case .success(let json):
-                    completion(json as? [String: AnyObject], nil)
-                case .failure(let error):
-                    completion(nil, error)
-                }
-        }
-    }
-    let customerContext = STPCustomerContext(keyProvider: MyAPIClient())
-    
-    self.paymentContext = STPPaymentContext(customerContext: customerContext)
-    self.paymentContext.paymentAmount = 5000
-    self.paymentContext.delegate = self
-    self.paymentContext.hostViewController = self
     
     
     override func viewDidLoad() {
@@ -155,16 +114,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: Actions
     
-    @IBAction func didSelectPaymentOption(_ sender: Any) {
-        self.paymentContext.pushPaymentOptionsViewController()
-    }
-    @IBAction func didSelectShippingOption(_ sender: Any) {
-        paymentContext.presentShippingViewController()
-    }
-    @IBAction func didTapOnPayment(_ sender: Any) {
-        paymentContext.requestPayment()
-    }
-
     @IBAction func didPressRequestButton(_ sender: Any) {
         
         // Device will stop advertising/browsing until after MultiPeer has sent data
@@ -264,27 +213,6 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         else {
             completion(.invalid, nil, nil, nil)
         }
-    }
-    
-    func paymentContext(_ paymentContext: STPPaymentContext,
-      didFinishWithStatus status: STPPaymentStatus,
-      error: Error?) {
-        switch status {
-        case .error:
-            self.showError(error)
-        case .success:
-            self.showReceipt()
-        case .userCancellation:
-            return // Do nothing
-        @unknown default:
-            <#fatalError()#>
-        }
-    }
-    
-    func paymentContext(_ paymentContext: STPPaymentContext,
-      didFailToLoadWithError error: Error) {
-        self.navigationController?.popViewController(animated: true)
-        // Show the error to your user, etc.
     }
     
     func sendFinalRequest() {
