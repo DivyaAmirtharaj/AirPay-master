@@ -31,7 +31,7 @@ class BuyButton: UIButton {
     static let defaultHeight = CGFloat(52)
     static let defaultFont = UIFont.boldSystemFont(ofSize: 20)
     var disabledColor = UIColor.lightGray
-    var enabledColor = UIColor.stripeBrightGreen
+    var enabledColor = UIColor.green
 
     override var isEnabled: Bool {
         didSet {

@@ -10,11 +10,9 @@ import Foundation
 import Stripe
 
 class MyAPIClient: NSObject, STPCustomerEphemeralKeyProvider {
-    
-    let customerContext = STPCustomerContext(keyProvider: MyAPIClient())
-    
+        
     static let sharedClient = MyAPIClient()
-    var baseURLString: String? = nil
+    var baseURLString: String? = "asdf"
     var baseURL: URL {
         if let urlString = self.baseURLString, let url = URL(string: urlString) {
             return url

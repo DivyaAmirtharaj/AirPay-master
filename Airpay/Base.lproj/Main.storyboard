@@ -110,12 +110,19 @@
                                     <action selector="didPressRequestButton:" destination="ge6-gk-5vN" eventType="touchUpInside" id="OGn-LT-wkd"/>
                                 </connections>
                             </button>
-
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IaI-cs-8ql">
                                 <rect key="frame" x="20" y="707" width="374" height="40"/>
                                 <state key="normal" title="Pay"/>
                                 <connections>
                                     <action selector="didPressPayButton:" destination="ge6-gk-5vN" eventType="touchUpInside" id="Mz1-rh-fAM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XYN-Eu-2Q4">
+                                <rect key="frame" x="278" y="77" width="104" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Add to Balance"/>
+                                <connections>
+                                    <segue destination="mZ8-zh-geo" kind="show" id="ufG-Wt-bW2"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -159,6 +166,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zrs-zU-cUM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1330.4347826086957" y="128.57142857142856"/>
+        </scene>
+        <!--Checkout View Controller-->
+        <scene sceneID="YZD-Sh-CJB">
+            <objects>
+                <viewController id="mZ8-zh-geo" customClass="CheckoutViewController" customModule="Airpay" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Tp9-xm-fyg">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="Wwe-1W-D2I"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="2wZ-Ph-PDO"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qlh-Ug-r6S" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2564" y="111"/>
         </scene>
     </scenes>
 </document>
