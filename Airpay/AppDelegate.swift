@@ -8,13 +8,20 @@
 
 import UIKit
 import Firebase
+import Stripe
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Stripe.setDefaultPublishableKey("pk_test_Qw0haIYdMjpZwWVGPKolFtnt007eI4imFa")
+        // do any other necessary launch configuration
+        return true
+    }
+    
+    internal func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         return true
@@ -36,4 +43,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-

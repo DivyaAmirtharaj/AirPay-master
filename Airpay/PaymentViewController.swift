@@ -29,8 +29,6 @@ extension String {
     }
   }
 }
-
-
 class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIApplicationDelegate {
 
     // MARK: Properties
@@ -58,12 +56,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        STPPaymentConfiguration.shared().publishableKey = "pk_test_Qw0haIYdMjpZwWVGPKolFtnt007eI4imFa"
-        // do any other necessary launch configuration
-        return true
-    }
-    
+    let customerContext = STPCustomerContext(keyProvider: MyAPIClient())
     
     override func viewDidLoad() {
         super.viewDidLoad()
