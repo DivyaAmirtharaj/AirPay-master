@@ -187,6 +187,9 @@ xcuserdata/
 #     modular gitignore: you have to put EVERYTHING in one file.
 #
 # COCOAPODS:
+
+Pods/
+
 #
 # c.f. http://guides.cocoapods.org/using/using-cocoapods.html#what-is-a-podfilelock
 # c.f. http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
