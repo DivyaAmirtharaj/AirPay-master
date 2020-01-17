@@ -8,8 +8,7 @@ target 'Airpay' do
   # Pods for Airpay
   pod 'MultiPeer'
   pod 'Stripe'
-  pod 'Alamofire'
   pod 'Firebase/Analytics'
-
+  pod 'Alamofire', '~> 5.0.0-rc.3'
 
 end

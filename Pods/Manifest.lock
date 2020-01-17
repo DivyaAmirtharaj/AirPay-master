@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.9.1)
+  - Alamofire (5.0.0-rc.3)
   - Firebase/Analytics (6.15.0):
     - Firebase/Core
   - Firebase/Core (6.15.0):
@@ -75,7 +75,7 @@ PODS:
   - Stripe (18.4.0)
 
 DEPENDENCIES:
-  - Alamofire
+  - Alamofire (~> 5.0.0-rc.3)
   - Firebase/Analytics
   - MultiPeer
   - Stripe
@@ -100,7 +100,7 @@ SPEC REPOS:
     - Stripe
 
 SPEC CHECKSUMS:
-  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  Alamofire: ca8c0de6906873be89d6deec5c8de279e00bf872
   Firebase: 5d77105d9740a07ca6b16927ca971db7e860faaf
   FirebaseAnalytics: e83e64b1231dedcd9ddd4bdecd9bcfd6ba341679
   FirebaseCore: 4aeb81ff53dcd9a3634ca725dc1fb8c2a4622046
@@ -117,6 +117,6 @@ SPEC CHECKSUMS:
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   Stripe: fa837c60f0644b488c994024ce7d9b001ea4e97c
 
-PODFILE CHECKSUM: 088104cab27b2d969c71c285641db26d550ceb16
+PODFILE CHECKSUM: 3d65efd2be25e4d6551860ebd46bc3014312a4ee
 
 COCOAPODS: 1.8.4

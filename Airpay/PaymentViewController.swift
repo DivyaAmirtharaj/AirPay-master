@@ -276,6 +276,8 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             self.showReceipt()
         case .userCancellation:
             return // Do nothing
+        @unknown default:
+            <#fatalError()#>
         }
     }
     
