@@ -10,7 +10,12 @@ import UIKit
 import Stripe
 
 class CheckoutViewController: UIViewController {
-
+    
+    lazy var textField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Amount to deposit"
+        return textField
+    }()
     lazy var cardTextField: STPPaymentCardTextField = {
         let cardTextField = STPPaymentCardTextField()
         return cardTextField
@@ -28,7 +33,7 @@ class CheckoutViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        let stackView = UIStackView(arrangedSubviews: [cardTextField, payButton])
+        let stackView = UIStackView(arrangedSubviews: [textField, cardTextField, payButton])
         stackView.axis = .vertical
         stackView.spacing = 20
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -42,6 +47,9 @@ class CheckoutViewController: UIViewController {
 
     @objc
     func pay() {
+        
+        print("this was called")
+        
         // Create an STPCardParams instance
         let cardParams = STPCardParams()
         cardParams.number = cardTextField.cardNumber
@@ -53,10 +61,58 @@ class CheckoutViewController: UIViewController {
         STPAPIClient.shared().createToken(withCard: cardParams) { token, error in
             guard let token = token else {
                 // Handle the error
+                print(error)
                 return
             }
             let tokenID = token.tokenId
-            // Send the token identifier to your server...
+            guard let amountText = self.textField.text else {
+                print("ANDIOOP2")
+                return
+            }
+            
+            let amount = Double(amountText)
+            
+            let session = URLSession.shared
+
+            guard let url = URL(string: "https://frozen-coast-06188.herokuapp.com/charge") else {
+                print("ANDIOOP3")
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("Powered by Swift!", forHTTPHeaderField: "X-Powered-By")
+            
+            let json = [
+                "amount": amount!,
+                "currency": "USD",
+                "stripeToken": tokenID,
+                "description": "Adding to Airpay balance"
+                ] as [String : Any]
+            
+            print(json)
+            
+            let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
+            
+            request.httpBody = jsonData
+            
+            let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
+                if let response = response {
+                    print(response)
+                }
+                if let data = data {
+                    do {
+                        let responsejson = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                        print(responsejson)
+                    } catch {
+                        print(error)
+                    }
+                }
+            }
+            
+            task.resume()
         }
     }
 }
