@@ -19,9 +19,28 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        nameTextField.delegate = self
         
+       
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if let current_user = loadUser() {
+                   os_log("Loaded user: ", log: OSLog.default, type: .debug)
+                   print(current_user.name)
+                   
+                   self.user = current_user
+                   
+                   
+                   let storyBoard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                   let viewController2 = storyBoard.instantiateViewController(withIdentifier: "PaymentViewController") as! PaymentViewController
+            
+                    viewController2.user = current_user
+                   self.present(viewController2, animated: true, completion: nil)
+               } else {
+                   os_log("Did not load user.", log: OSLog.default, type: .debug)
+                   nameTextField.delegate = self
+               }
     }
     
     // MARK: UITextFieldDelegate
@@ -51,22 +70,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         super.prepare(for: segue, sender: sender)
         
-//        guard let button = sender as? UIButton, button == continueButton else {
-//            os_log("The continue button was not pressed, cancelling", log: OSLog.default, type: .debug)
-//            return
-//        }
-        
         let destController = segue.destination as! PaymentViewController
         
-        
-        
-        let name = nameTextField.text ?? ""
-        
-        print("Saving: " + name)
-        
-        user = User(name: name)
-        
-        destController.user = user
+            let name = nameTextField.text ?? ""
+            
+            print("Saving: " + name)
+            
+            user = User(name: name)
+            saveUser()
+            
+            destController.user = user
     }
     
     // MARK: Private Methods
@@ -74,6 +87,22 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let text = nameTextField.text ?? ""
         continueButton.isEnabled = !text.isEmpty
     }
+    
+    private func saveUser() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(user, toFile: User.ArchiveURL.path)
+        
+        if isSuccessfulSave {
+            os_log("User successfully saved.", log: OSLog.default, type: .debug)
+        } else {
+            os_log("Failed to save user...", log: OSLog.default, type: .error)
+        }
+        
+    }
+    
+    private func loadUser() -> User? {
+        return NSKeyedUnarchiver.unarchiveObject(withFile: User.ArchiveURL.path) as? User
+    }
+    
 
 }
 

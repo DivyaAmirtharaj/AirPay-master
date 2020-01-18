@@ -54,7 +54,7 @@
         <!--PaymentViewController-->
         <scene sceneID="5PY-li-E6P">
             <objects>
-                <viewController title="PaymentViewController" id="ge6-gk-5vN" customClass="PaymentViewController" customModule="Airpay" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PaymentViewController" title="PaymentViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ge6-gk-5vN" customClass="PaymentViewController" customModule="Airpay" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GJf-XJ-F06">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

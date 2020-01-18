@@ -59,7 +59,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         if let nameText = user?.name {
             print(nameText)
             
