@@ -11,6 +11,9 @@ import Stripe
 
 class CheckoutViewController: UIViewController {
     
+    // MARK: Properties
+    var user: User?
+    
     lazy var textField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Amount to deposit"
@@ -69,6 +72,11 @@ class CheckoutViewController: UIViewController {
                 print("ANDIOOP2")
                 return
             }
+            
+            guard let user = self.user else {
+                print("ANDIOOP4")
+                return
+            }
                         
             let session = URLSession.shared
 
@@ -87,7 +95,8 @@ class CheckoutViewController: UIViewController {
             let json = [
                 "amount": amountText,
                 "stripeToken": tokenID,
-                "description": "Adding to Airpay balance"
+                "description": "Adding to Airpay balance",
+                "userId": user.oid
                 ] as [String : Any]
             
             print(json)

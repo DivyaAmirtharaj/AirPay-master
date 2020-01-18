@@ -122,7 +122,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Add to Balance"/>
                                 <connections>
-                                    <segue destination="mZ8-zh-geo" kind="show" id="ufG-Wt-bW2"/>
+                                    <segue destination="mZ8-zh-geo" kind="show" identifier="checkoutSegue" id="ufG-Wt-bW2"/>
                                 </connections>
                             </button>
                         </subviews>

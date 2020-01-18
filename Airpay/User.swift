@@ -48,9 +48,9 @@ class User: NSObject, NSCoding {
         self.balance = balance
 
     }
+
     
-    public func update(balance: Double, oid: String) {
-        self.balance = balance
+    public func setOid(oid: String) {
         self.oid = oid
     }
     

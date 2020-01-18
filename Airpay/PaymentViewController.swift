@@ -72,7 +72,14 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             balanceLabel.text = String(balanceText)
         }
         
-
+        if let oid = user?.oid {
+            print("user oid: " + oid)
+        }
+        
+        
+        // need to refresh user on load every time
+        // and update balance on server lol rip
+        
 
         self.textField.delegate = self
         self.tableView.delegate = self
@@ -103,8 +110,21 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewWillDisappear(animated)
     }
     
+    //MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        super.prepare(for: segue, sender: sender)
+        
+        let destController = segue.destination as! CheckoutViewController
+        
+        destController.user = user
+    }
+    
+    
     
     // MARK: Actions
+    
     
     @IBAction func didPressRequestButton(_ sender: Any) {
         
