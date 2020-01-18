@@ -9,6 +9,7 @@
 import UIKit
 import MultiPeer
 import Stripe
+import Foundation
 
 enum DataType: UInt32 {
     case initialRequest = 1 // requesting $x
@@ -144,10 +145,13 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
         if let message = textField.text {
                if !message.isEmpty {
+                if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: message)) {
+                        print("tis a number")
                     if let username = user?.name {
                         
                         
                 confirmAlert(username: username, message: message)
+                    }
                 }
             }
         }
