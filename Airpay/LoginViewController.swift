@@ -34,7 +34,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                    
                    
                    let storyBoard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            
                    let viewController2 = storyBoard.instantiateViewController(withIdentifier: "PaymentViewController") as! PaymentViewController
+            
+                    viewController2.modalPresentationStyle = .fullScreen
+                    viewController2.modalTransitionStyle = .crossDissolve
             
                     viewController2.user = current_user
                    self.present(viewController2, animated: true, completion: nil)

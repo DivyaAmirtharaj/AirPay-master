@@ -25,7 +25,7 @@
                                 <state key="normal" title="Continue"/>
                                 <connections>
                                     <action selector="onContinueButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Kdh-eW-0fF"/>
-                                    <segue destination="ge6-gk-5vN" kind="show" identifier="toPaymentSegue" id="aAs-cS-uYj"/>
+                                    <segue destination="ge6-gk-5vN" kind="showDetail" identifier="toPaymentSegue" id="aAs-cS-uYj"/>
                                 </connections>
                             </button>
                         </subviews>
