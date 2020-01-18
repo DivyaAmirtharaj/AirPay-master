@@ -9,14 +9,22 @@
 import UIKit
 import Stripe
 
-class CheckoutViewController: UIViewController {
+class CheckoutViewController: UIViewController, UIApplicationDelegate {
+    
+    var user: User?
+    @IBOutlet weak var backButton: UIButton!
+    
+    @IBAction func onbackButton (_ sender: Any) {
+        performSegue(withIdentifier: "return", sender: self)
+        }
+    
     
     // MARK: Properties
-    var user: User?
+    //var user: User?
     
     lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Amount to deposit"
+        textField.placeholder = "Amount to add to balance"
         return textField
     }()
     lazy var cardTextField: STPPaymentCardTextField = {
@@ -28,7 +36,7 @@ class CheckoutViewController: UIViewController {
         button.layer.cornerRadius = 5
         button.backgroundColor = .systemBlue
         button.titleLabel?.font = UIFont.systemFont(ofSize: 22)
-        button.setTitle("Pay", for: .normal)
+        button.setTitle("Add", for: .normal)
         button.addTarget(self, action: #selector(pay), for: .touchUpInside)
         return button
     }()
@@ -120,8 +128,15 @@ class CheckoutViewController: UIViewController {
                     }
                 }
             }
+            /*let amountNumber = Double(amountText)!
+            self.user?.addBalance(change: amountNumber)
             
-            task.resume()
+            if let balanceText = self.user?.getBalance() {
+            print(balanceText)
+            //self.balanceLabel.text = String(balanceText)
+            }
+            task.resume()*/
+            
         }
     }
 }

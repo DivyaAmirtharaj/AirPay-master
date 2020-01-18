@@ -9,6 +9,7 @@
 import UIKit
 import MultiPeer
 import Stripe
+import Foundation
 
 enum DataType: UInt32 {
     case initialRequest = 1 // requesting $x
@@ -116,7 +117,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         let destController = segue.destination as! CheckoutViewController
         
-        destController.user = user
+        destController.user = self.user!
     }
     
     
@@ -161,11 +162,12 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
                 
         if let message = textField.text {
-               if !message.isEmpty {
+            if !message.isEmpty {
+                if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: message)) {
+                        print("tis a number")
                     if let username = user?.name {
-                        
-                        
                 confirmAlert(username: username, message: message)
+                    }
                 }
             }
         }
@@ -228,6 +230,10 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             if let balanceText = self.user?.getBalance() {
                 print(balanceText)
                 self.balanceLabel.text = String(balanceText)
+                
+                if balanceText <= 0 {
+                    balanceAlert()
+                }
             }
             let obj = ["message": message, "requester": username, "responder": responder] as [String : String]
             MultiPeer.instance.send(object: obj, type: DataType.finalResponse.rawValue)
@@ -243,7 +249,12 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
              if let balanceText = self.user?.getBalance() {
                  print(balanceText)
                  self.balanceLabel.text = String(balanceText)
+                
+                 if balanceText <= 0 {
+                     balanceAlert()
+                 }
              }
+            
             
             let obj = ["message": message, "requester": username, "selectedUsers": self.selectedUsers] as [String : Any]
              MultiPeer.instance.send(object: obj, type: DataType.payConfirm.rawValue)
@@ -252,6 +263,18 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
          }
          
          
+     }
+     func balanceAlert() {
+         let alertController = UIAlertController(title: "Balance Low", message:
+             "Add more money to your balance", preferredStyle: .alert)
+         
+         let dismissAction = UIAlertAction(title: "Ok", style: .default) { (action) in
+             self.performSegue(withIdentifier: "checkoutSegue", sender: self)
+
+         }
+         alertController.addAction(dismissAction)
+
+         self.present(alertController, animated: true, completion: nil)
      }
     
      func payeeResponse(username: String, message: String) {
