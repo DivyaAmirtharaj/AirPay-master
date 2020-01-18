@@ -20,7 +20,7 @@ class CheckoutViewController: UIViewController, UIApplicationDelegate {
     
     
     // MARK: Properties
-    var user: User?
+    //var user: User?
     
     lazy var textField: UITextField = {
         let textField = UITextField()
