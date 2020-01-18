@@ -60,7 +60,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         if let nameText = user?.name {
             print(nameText)
             
@@ -73,7 +73,12 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             balanceLabel.text = String(balanceText)
         }
         
-
+        if let oid = user?.oid {
+            print("user oid: " + oid)
+            
+            loadUserFromServer(oid: oid)
+        }
+            
 
         self.textField.delegate = self
         self.tableView.delegate = self
@@ -104,8 +109,21 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewWillDisappear(animated)
     }
     
+    //MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        super.prepare(for: segue, sender: sender)
+        
+        let destController = segue.destination as! CheckoutViewController
+        
+        destController.user = user
+    }
+    
+    
     
     // MARK: Actions
+    
     
     @IBAction func didPressRequestButton(_ sender: Any) {
         
@@ -210,6 +228,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         if let responder = user?.name {
             let messageNumber = Double(message)!
             self.user?.subtractBalance(change: messageNumber)
+            updateBalanceOnServer()
             if let balanceText = self.user?.getBalance() {
                 print(balanceText)
                 self.balanceLabel.text = String(balanceText)
@@ -224,7 +243,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                          
              let messageNumber = Double(message)!
             self.user?.subtractBalance(change: (Double(self.selectedUsers.count) * messageNumber))
-             
+             updateBalanceOnServer()
              if let balanceText = self.user?.getBalance() {
                  print(balanceText)
                  self.balanceLabel.text = String(balanceText)
@@ -242,7 +261,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
      func payeeResponse(username: String, message: String) {
          let messageNumber = Double(message)!
          self.user?.addBalance(change: messageNumber)
-         
+         updateBalanceOnServer()
          if let balanceText = self.user?.getBalance() {
              print(balanceText)
              self.balanceLabel.text = String(balanceText)
@@ -289,6 +308,112 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         self.present(requestAlertController, animated: true, completion: nil)
     }
+    
+    // MARK: Private
+    
+    private func loadUserFromServer(oid: String) {
+        if let user = self.user {
+            let session = URLSession.shared
+            
+            guard let url = URL(string: "https://frozen-coast-06188.herokuapp.com/users/" + oid) else {
+                print("ANDIOOP3")
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue("Powered by Swift!", forHTTPHeaderField: "X-Powered-By")
+            
+            let (data, response, error) = synchronousDataTask(session: session, request: request)
+            if let response = response {
+                print(response)
+            }
+            if let data = data {
+                do {
+                    let responsejson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! NSDictionary
+                    
+                        user.balance = responsejson["balance"] as! Double
+                        self.balanceLabel.text = String(user.balance)
+                        updateBalanceOnServer()
+                
+                } catch {
+                    print(error)
+                }
+            }
+            if let error = error {
+                print(error)
+            }
+            
+        }
+        
+    }
+    
+    private func updateBalanceOnServer() {
+        
+        if let user = self.user {
+            let session = URLSession.shared
+
+            guard let url = URL(string: "https://frozen-coast-06188.herokuapp.com/users/" + user.oid) else {
+                print("ANDIOOP3")
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "PATCH"
+            
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue("Powered by Swift!", forHTTPHeaderField: "X-Powered-By")
+            
+            let json = [
+                "balance": user.balance
+                ] as [String : Any]
+            
+            print(json)
+            
+            let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
+        
+            request.httpBody = jsonData
+            
+            let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
+                if let response = response {
+                    print(response)
+                }
+                if let data = data {
+                    do {
+                        let responsejson = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                        print(responsejson)
+                    } catch {
+                        print(error)
+                    }
+                }
+            }
+            
+            task.resume()
+            
+        }
+        
+    }
+    
+    private func synchronousDataTask(session: URLSession, request: URLRequest) -> (Data?, URLResponse?, Error?) {
+        var data: Data?, response: URLResponse?, error: Error?
+
+        let semaphore = DispatchSemaphore(value: 0)
+
+        session.dataTask(with: request) {
+            data = $0; response = $1; error = $2
+            semaphore.signal()
+            }.resume()
+
+        semaphore.wait()
+
+        return (data, response, error)
+    }
+    
+    
 }
     
     
@@ -343,7 +468,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                         
                         
                         self.user?.addBalance(change: amountNumber)
-                        
+                        updateBalanceOnServer()
                         if let balanceText = self.user?.getBalance() {
                             print(balanceText)
                             self.balanceLabel.text = String(balanceText)
@@ -372,4 +497,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             return true
         }
     }
+
+
+
 

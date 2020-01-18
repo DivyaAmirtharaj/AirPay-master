@@ -54,7 +54,7 @@
         <!--PaymentViewController-->
         <scene sceneID="5PY-li-E6P">
             <objects>
-                <viewController storyboardIdentifier="SecondScreen" title="PaymentViewController" id="ge6-gk-5vN" customClass="PaymentViewController" customModule="Airpay" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PaymentViewController" title="PaymentViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ge6-gk-5vN" customClass="PaymentViewController" customModule="Airpay" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GJf-XJ-F06">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -122,7 +122,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Add to Balance"/>
                                 <connections>
-                                    <segue destination="mZ8-zh-geo" kind="show" id="ufG-Wt-bW2"/>
+                                    <segue destination="mZ8-zh-geo" kind="show" identifier="checkoutSegue" id="ufG-Wt-bW2"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -170,35 +170,18 @@
         <!--Checkout View Controller-->
         <scene sceneID="YZD-Sh-CJB">
             <objects>
-                <viewController storyboardIdentifier="ThirdScreen" id="mZ8-zh-geo" customClass="CheckoutViewController" customModule="Airpay" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="mZ8-zh-geo" customClass="CheckoutViewController" customModule="Airpay" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Tp9-xm-fyg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qvv-HC-pB4">
-                                <rect key="frame" x="191" y="350" width="34" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Back"/>
-                                <connections>
-                                    <action selector="onbackButton:" destination="mZ8-zh-geo" eventType="touchUpInside" id="lwi-jO-opa"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="Wwe-1W-D2I"/>
                     </view>
                     <navigationItem key="navigationItem" id="2wZ-Ph-PDO"/>
-                    <connections>
-                        <outlet property="backButton" destination="Qvv-HC-pB4" id="Jzu-JD-Rgk"/>
-                        <segue destination="ge6-gk-5vN" kind="presentation" identifier="return" id="oon-FE-0l8"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qlh-Ug-r6S" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2563.768115942029" y="110.49107142857143"/>
+            <point key="canvasLocation" x="2564" y="111"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="oon-FE-0l8"/>
-    </inferredMetricsTieBreakers>
 </document>
