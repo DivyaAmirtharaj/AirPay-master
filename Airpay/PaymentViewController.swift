@@ -70,7 +70,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         if let balanceText = user?.balance {
             print(balanceText)
             
-            balanceLabel.text = String(balanceText)
+            balanceLabel.text = formatPrice(price: balanceText)
         }
         
         if let oid = user?.oid {
@@ -229,7 +229,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
             updateBalanceOnServer()
             if let balanceText = self.user?.getBalance() {
                 print(balanceText)
-                self.balanceLabel.text = String(balanceText)
+                self.balanceLabel.text = formatPrice(price: balanceText)
                 
                 if balanceText <= 0 {
                     balanceAlert()
@@ -248,7 +248,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
              updateBalanceOnServer()
              if let balanceText = self.user?.getBalance() {
                  print(balanceText)
-                 self.balanceLabel.text = String(balanceText)
+                self.balanceLabel.text = formatPrice(price: balanceText)
                 
                  if balanceText <= 0 {
                      balanceAlert()
@@ -283,7 +283,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
          updateBalanceOnServer()
          if let balanceText = self.user?.getBalance() {
              print(balanceText)
-             self.balanceLabel.text = String(balanceText)
+            self.balanceLabel.text = formatPrice(price: balanceText)
          }
          
      }
@@ -355,7 +355,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                     let responsejson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! NSDictionary
                     
                         user.balance = responsejson["balance"] as! Double
-                        self.balanceLabel.text = String(user.balance)
+                    self.balanceLabel.text = formatPrice(price: user.balance)
                         updateBalanceOnServer()
                 
                 } catch {
@@ -433,6 +433,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     private func formatPrice(price: Double) -> String {
+        
         let currencyFormatter = NumberFormatter()
         currencyFormatter.usesGroupingSeparator = true
         currencyFormatter.numberStyle = .currency
@@ -501,7 +502,7 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
                         updateBalanceOnServer()
                         if let balanceText = self.user?.getBalance() {
                             print(balanceText)
-                            self.balanceLabel.text = String(balanceText)
+                            self.balanceLabel.text = formatPrice(price: balanceText)
                         }
                         
                         }

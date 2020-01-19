@@ -46,7 +46,7 @@ class CheckoutViewController: UIViewController, UIApplicationDelegate {
         view.backgroundColor = .white
         let stackView = UIStackView(arrangedSubviews: [textField, cardTextField, payButton])
         stackView.axis = .vertical
-        stackView.spacing = 20
+        stackView.spacing = 24
         stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
         NSLayoutConstraint.activate([
@@ -81,6 +81,15 @@ class CheckoutViewController: UIViewController, UIApplicationDelegate {
                 return
             }
             
+            guard let amount = Double(amountText) else {
+                print("ANDIOOP5")
+                return
+            }
+            
+            let finalAmount = 100.0 * amount
+            
+            let finalAmountText = String(finalAmount)
+            
             guard let user = self.user else {
                 print("ANDIOOP4")
                 return
@@ -101,7 +110,7 @@ class CheckoutViewController: UIViewController, UIApplicationDelegate {
             request.setValue("Powered by Swift!", forHTTPHeaderField: "X-Powered-By")
             
             let json = [
-                "amount": amountText,
+                "amount": finalAmountText,
                 "stripeToken": tokenID,
                 "description": "Adding to Airpay balance",
                 "userId": user.oid
@@ -139,11 +148,8 @@ class CheckoutViewController: UIViewController, UIApplicationDelegate {
             viewController2.modalTransitionStyle = .crossDissolve
                 
             
-            guard let amount = Double(amountText) else {
-                print("ANDIOOP5")
-                return
-            }
-            user.balance = user.balance + (amount/100.0)
+            
+            user.balance = user.balance + finalAmount
             viewController2.user = user
             self.present(viewController2, animated: true, completion: nil)
             

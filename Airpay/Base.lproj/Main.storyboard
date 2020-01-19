@@ -98,20 +98,20 @@
                                     <outlet property="delegate" destination="ge6-gk-5vN" id="RaM-ET-but"/>
                                 </connections>
                             </tableView>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zoc-C4-KJf">
-                                <rect key="frame" x="20" y="615" width="374" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zoc-C4-KJf">
+                                <rect key="frame" x="20" y="607" width="374" height="44"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w8B-J7-d9K">
-                                <rect key="frame" x="20" y="669" width="374" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w8B-J7-d9K">
+                                <rect key="frame" x="20" y="671" width="374" height="30"/>
                                 <state key="normal" title="Request"/>
                                 <connections>
                                     <action selector="didPressRequestButton:" destination="ge6-gk-5vN" eventType="touchUpInside" id="OGn-LT-wkd"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IaI-cs-8ql">
-                                <rect key="frame" x="20" y="707" width="374" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IaI-cs-8ql">
+                                <rect key="frame" x="20" y="713" width="374" height="30"/>
                                 <state key="normal" title="Pay"/>
                                 <connections>
                                     <action selector="didPressPayButton:" destination="ge6-gk-5vN" eventType="touchUpInside" id="Mz1-rh-fAM"/>
@@ -129,7 +129,6 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="zoc-C4-KJf" firstAttribute="trailing" secondItem="7mw-Lq-1Jd" secondAttribute="trailing" constant="-20" id="0zx-WQ-1mO"/>
-                            <constraint firstItem="IaI-cs-8ql" firstAttribute="top" secondItem="w8B-J7-d9K" secondAttribute="bottom" constant="16" id="14r-ml-rqc"/>
                             <constraint firstItem="zoc-C4-KJf" firstAttribute="leading" secondItem="7mw-Lq-1Jd" secondAttribute="leading" constant="20" id="2cK-QQ-IJL"/>
                             <constraint firstItem="Nrt-G0-w5X" firstAttribute="top" secondItem="7mw-Lq-1Jd" secondAttribute="top" constant="40" id="50h-xa-hXp"/>
                             <constraint firstItem="uY3-ZC-BIv" firstAttribute="trailing" secondItem="7mw-Lq-1Jd" secondAttribute="trailing" constant="-20" id="5t3-G8-sGU"/>
@@ -139,12 +138,12 @@
                             <constraint firstItem="zoc-C4-KJf" firstAttribute="top" secondItem="uY3-ZC-BIv" secondAttribute="bottom" constant="40" id="CaX-HY-6n4"/>
                             <constraint firstItem="IaI-cs-8ql" firstAttribute="trailing" secondItem="7mw-Lq-1Jd" secondAttribute="trailing" constant="-20" id="EaQ-bf-5f6"/>
                             <constraint firstItem="GUS-bz-FSl" firstAttribute="top" secondItem="Nrt-G0-w5X" secondAttribute="bottom" constant="20" id="EpF-fO-rUX"/>
-                            <constraint firstItem="7mw-Lq-1Jd" firstAttribute="bottom" secondItem="IaI-cs-8ql" secondAttribute="bottom" constant="40" id="F1t-fx-RQd"/>
                             <constraint firstItem="w8B-J7-d9K" firstAttribute="trailing" secondItem="7mw-Lq-1Jd" secondAttribute="trailing" constant="-20" id="HMn-ma-m8b"/>
                             <constraint firstItem="SIh-PB-hhd" firstAttribute="leading" secondItem="7mw-Lq-1Jd" secondAttribute="leading" constant="20" id="PVD-7i-9XS"/>
                             <constraint firstItem="GUS-bz-FSl" firstAttribute="trailing" secondItem="7mw-Lq-1Jd" secondAttribute="trailing" constant="-20" id="Whw-ze-1J2"/>
                             <constraint firstItem="SIh-PB-hhd" firstAttribute="top" secondItem="GUS-bz-FSl" secondAttribute="bottom" constant="40" id="i2R-DU-3qk"/>
                             <constraint firstItem="w8B-J7-d9K" firstAttribute="top" secondItem="zoc-C4-KJf" secondAttribute="bottom" constant="20" id="mK2-eP-Bcv"/>
+                            <constraint firstItem="IaI-cs-8ql" firstAttribute="top" secondItem="w8B-J7-d9K" secondAttribute="bottom" constant="12" id="mvf-bl-mmk"/>
                             <constraint firstItem="SIh-PB-hhd" firstAttribute="trailing" secondItem="7mw-Lq-1Jd" secondAttribute="trailing" constant="-20" id="ofh-6h-aeP"/>
                             <constraint firstItem="Nrt-G0-w5X" firstAttribute="trailing" secondItem="7mw-Lq-1Jd" secondAttribute="trailing" constant="-20" id="sxp-JH-ytR"/>
                             <constraint firstItem="IaI-cs-8ql" firstAttribute="leading" secondItem="7mw-Lq-1Jd" secondAttribute="leading" constant="20" id="tdH-Re-NNY"/>
