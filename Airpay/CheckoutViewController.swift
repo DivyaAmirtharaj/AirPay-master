@@ -128,14 +128,24 @@ class CheckoutViewController: UIViewController, UIApplicationDelegate {
                     }
                 }
             }
-            /*let amountNumber = Double(amountText)!
-            self.user?.addBalance(change: amountNumber)
+
+            task.resume()
             
-            if let balanceText = self.user?.getBalance() {
-            print(balanceText)
-            //self.balanceLabel.text = String(balanceText)
+            let storyBoard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            
+           let viewController2 = storyBoard.instantiateViewController(withIdentifier: "PaymentViewController") as! PaymentViewController
+    
+            viewController2.modalPresentationStyle = .fullScreen
+            viewController2.modalTransitionStyle = .crossDissolve
+                
+            
+            guard let amount = Double(amountText) else {
+                print("ANDIOOP5")
+                return
             }
-            task.resume()*/
+            user.balance = user.balance + (amount/100.0)
+            viewController2.user = user
+            self.present(viewController2, animated: true, completion: nil)
             
         }
     }

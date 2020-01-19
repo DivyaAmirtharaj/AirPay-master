@@ -432,6 +432,17 @@ class PaymentViewController: UIViewController, UITableViewDelegate, UITableViewD
         return (data, response, error)
     }
     
+    private func formatPrice(price: Double) -> String {
+        let currencyFormatter = NumberFormatter()
+        currencyFormatter.usesGroupingSeparator = true
+        currencyFormatter.numberStyle = .currency
+        
+        currencyFormatter.locale = Locale.current
+        let priceString = currencyFormatter.string(from: NSNumber(value: price))!
+        return priceString
+        
+    }
+    
     
 }
     

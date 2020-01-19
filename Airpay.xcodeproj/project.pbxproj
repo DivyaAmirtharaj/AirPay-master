@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2563230C23D393AB00B85F05 /* navigationTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2563230B23D393AB00B85F05 /* navigationTestViewController.swift */; };
-		2563230E23D3954100B85F05 /* newViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2563230D23D3954100B85F05 /* newViewController.swift */; };
 		2563231023D397F700B85F05 /* MemoryDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2563230F23D397F700B85F05 /* MemoryDataStore.swift */; };
 		25856ADA23D14D5A00738118 /* MyAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25856AD923D14D5A00738118 /* MyAPIClient.swift */; };
 		25856ADE23D15CC300738118 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25856ADD23D15CC300738118 /* Buttons.swift */; };
@@ -28,7 +27,6 @@
 
 /* Begin PBXFileReference section */
 		2563230B23D393AB00B85F05 /* navigationTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = navigationTestViewController.swift; sourceTree = "<group>"; };
-		2563230D23D3954100B85F05 /* newViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newViewController.swift; sourceTree = "<group>"; };
 		2563230F23D397F700B85F05 /* MemoryDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDataStore.swift; sourceTree = "<group>"; };
 		25856AD923D14D5A00738118 /* MyAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAPIClient.swift; sourceTree = "<group>"; };
 		25856ADD23D15CC300738118 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -101,7 +99,6 @@
 				7E3FDDC323CCEDD400DA09E6 /* LoginViewController.swift */,
 				25856AE123D1614A00738118 /* CheckoutViewController.swift */,
 				7E3FDDD523CCFDD700DA09E6 /* PaymentViewController.swift */,
-				2563230D23D3954100B85F05 /* newViewController.swift */,
 				7E3FDDC523CCEDD400DA09E6 /* Main.storyboard */,
 				7E3FDDD323CCF32600DA09E6 /* User.swift */,
 				7E3FDDC823CCEDD600DA09E6 /* Assets.xcassets */,
@@ -248,7 +245,6 @@
 				25856AE223D1614A00738118 /* CheckoutViewController.swift in Sources */,
 				25856ADE23D15CC300738118 /* Buttons.swift in Sources */,
 				2563230C23D393AB00B85F05 /* navigationTestViewController.swift in Sources */,
-				2563230E23D3954100B85F05 /* newViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

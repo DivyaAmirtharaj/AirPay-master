@@ -35,7 +35,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                    
                    let storyBoard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             
-            
                    let viewController2 = storyBoard.instantiateViewController(withIdentifier: "PaymentViewController") as! PaymentViewController
             
                     viewController2.modalPresentationStyle = .fullScreen
