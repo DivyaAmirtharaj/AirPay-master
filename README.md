@@ -4,7 +4,7 @@ AirPay is an iOS app utilizing Multi-Peer Connectivity and Stripe payments to fa
 ## Installation
 Install [Cocoapods](https://cocoapods.org/) and use it to add 'Multipeer' and 'Stripe' to the Podfile.
 
-```bash
+```pods
 pod 'Multipeer'
 pod 'Stripe'
 ```
